@@ -1,4 +1,4 @@
-import weatherAPI from "./weather";
+import weatherAPI from "./weatherAPI";
 
 const controller = (() => {
 
