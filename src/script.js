@@ -1,4 +1,5 @@
 import weatherAPI from "./weatherAPI";
+import model from "./model";
 
 const controller = (() => {
 
@@ -6,9 +7,7 @@ const controller = (() => {
     const start = () => {
         weatherAPI.setKey();
         const city = prompt("What city you want check weather?", "London");
-        weatherAPI.getCurrent(city).then((response) => console.log(response));
-        weatherAPI.getForecast(city).then((response) => console.log(response));
-        weatherAPI.getHistory(city).then((response) => console.log(response));
+        model.getCurrentWeather(city).then((r) => console.log(r));
     }
     return { start }
 })()
