@@ -1,8 +1,6 @@
 class Weather {
-    constructor(city, country, date, condition, tempC, tempF, tempFeelsC, tempFeelsF, wind, humidity, isDay){
-        this.city = city;
-        this.country = country;
-        this.date = date;
+    constructor(time, condition, tempC, tempF, tempFeelsC, tempFeelsF, wind, humidity, isDay){
+        this.time = time;
         this.condition = condition;
         this.tempC = tempC;
         this.tempF = tempF;

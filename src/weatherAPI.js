@@ -17,7 +17,7 @@ const weatherAPI = (() => {
     const getForecast = async (city, amountOfDays = 3) => {
         const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${city}&days=${amountOfDays}`);
         const forecastData = await response.json();
-        return forecastData.forecast.forecastday;
+        return forecastData;
     }
 
     const getHistory = async (city, date = new Date()) => {
