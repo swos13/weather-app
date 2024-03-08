@@ -31,23 +31,35 @@ const model = (() => {
         const data = await weatherAPI.getCurrent(city);
         return getCurrentWeatherData(data.location, data.current);
     }
+
+    const getWeatherDay = (day, location) => {
+        const hours = [];
+            day.hour.forEach((hour) => {
+                hours.push(getForecastWeatherData(hour));
+            })
+            const summary = day.day;
+        return new WeatherDay(location.name, location.country, day.date, summary.mintemp_c, summary.maxtemp_c, summary.mintemp_f, summary.maxtemp_f, summary.avgtemp_c, summary.avgtemp_f, hours)
+    }
     
     const getForecast = async (city) => {
         const data = await weatherAPI.getForecast(city);
         const {location, forecast: {forecastday}} = data;
         const days = [];
         forecastday.forEach((day) => {
-            const hours = [];
-            day.hour.forEach((hour) => {
-                hours.push(getForecastWeatherData(hour));
-            })
-            const summary = day.day;
-            days.push(new WeatherDay(location.name, location.country, day.date, summary.mintemp_c, summary.maxtemp_c, summary.mintemp_f, summary.maxtemp_f, summary.avgtemp_c, summary.avgtemp_f, hours));
+            days.push(getWeatherDay(day, location));
         });
         return days;
     }
 
-    const getHistory = async (city) => weatherAPI.getHistory(city);
+    const getHistory = async (city, date = null) => {
+        if(date == null){
+            date = new Date();
+            date.setDate(date.getDate() - 1);
+        }
+        const data = await weatherAPI.getHistory(city, date);
+        const {location, forecast: {forecastday}} = data;
+        return getWeatherDay(forecastday[0], location);
+    }
 
     return { setUp, getCurrentWeather, getForecast, getHistory }
 })();
