@@ -1,4 +1,5 @@
 import model from "./model";
+import "./style.css"
 
 const controller = (() => {
 
