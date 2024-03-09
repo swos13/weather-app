@@ -15,3 +15,16 @@
     padding: 0.5rem;
     border-radius: 24px;
 }
+
+.location-container {
+    text-align: center;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: center;
+}
+
+.weather-card {
+    border: 1px solid black;
+}
