@@ -5,7 +5,7 @@ import "./style.css"
 const controller = (() => {
 
     const getWeatherData = (city) => {
-        model.getCurrentWeather(city).then((data) => view.displayWeatherContainer(data));
+        model.getCurrentWeather(city).then((data) => view.displayWeatherData(data));
         model.getForecast(city).then((r) => console.log(r));
         model.getHistory(city, new Date("2024-03-07")).then((r) => console.log(r));
     }

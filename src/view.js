@@ -30,9 +30,13 @@ const view = (() => {
         const card = document.createElement('div');
         card.classList.add('weather-card');
 
+        const date = document.createElement('div');
+        date.classList.add('date-container');
+        date.textContent = `Today ${data.time.toLocaleDateString('en-GB')}`;
+
         const time = document.createElement('div');
         time.classList.add('time-container');
-        time.textContent = data.time;
+        time.textContent = `${data.time.getHours()}:${data.time.getMinutes()}`;
 
         const condition = document.createElement('div');
         condition.classList.add('condition-container');
@@ -46,11 +50,17 @@ const view = (() => {
         wind.classList.add('wind-container');
         wind.textContent = `Wind: ${data.wind}km/h`;
 
-        appendChildren(card, [time, condition, humidity, wind]);
+        appendChildren(card, [date, time, condition, humidity, wind]);
         return card;
     }
 
-    const displayWeatherContainer = (data) => {
+    const clearWeatherContainer = () => {
+        while(weatherContainer.lastChild)
+            weatherContainer.removeChild(weatherContainer.lastChild);
+    }
+
+    const displayWeatherData = (data) => {
+        clearWeatherContainer();
         displayLocationName(data.location.city, data.location.country);
         const cardsContainer = document.createElement('div');
         cardsContainer.classList.add('cards-container');
@@ -58,7 +68,7 @@ const view = (() => {
         cardsContainer.appendChild(createCurrentWeather(data));
     }
 
-    return { getSearchInput, getSearchButton, displayWeatherContainer }
+    return { getSearchInput, getSearchButton, displayWeatherData }
 })();
 
 export default view;
