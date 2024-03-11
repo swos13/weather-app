@@ -4,7 +4,7 @@ class WeatherDay {
 
     hours = [];
 
-    constructor(city, country, date, minTempC, maxTempC, minTempF, maxTempF, avgTempC, avgTempF, hours){
+    constructor(city, country, date, minTempC, maxTempC, minTempF, maxTempF, avgTempC, avgTempF, avgHumidity, maxWind, hours){
         this.location = new Location(city, country);
         this.date = new Date(date);
         this.minTempC = minTempC;
@@ -13,6 +13,8 @@ class WeatherDay {
         this.maxTempF = maxTempF;
         this.avgTempC = avgTempC;
         this.avgTempF = avgTempF;
+        this.avgHumidity = avgHumidity;
+        this.maxWind = maxWind;
         for(let i=0; i<24; i++)
             this.hours.push(hours[i]);
     }

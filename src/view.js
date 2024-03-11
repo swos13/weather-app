@@ -26,7 +26,7 @@ const view = (() => {
         weatherContainer.appendChild(locationContainer);
     }
 
-    const createCurrentWeather = (data) => {
+    const createCurrentWeatherCard = (data) => {
         const card = document.createElement('div');
         card.classList.add('weather-card');
 
@@ -54,18 +54,61 @@ const view = (() => {
         return card;
     }
 
+    const getConditionOfDay = (day) => {
+        const conditions = [];
+        day.hours.forEach((hour) => conditions.push(hour.condition));
+        return conditions.sort((conditionA, conditionB) =>
+            conditions.filter(condition => condition === conditionA).length
+            - conditions.filter(condition => condition === conditionB).length
+        ).pop();
+    }
+
+    const createForecastWeatherCard = (data) => {
+        const card = document.createElement('div');
+        card.classList.add('weather-card');
+
+        const date = document.createElement('div');
+        date.classList.add('date-container');
+        date.textContent = `${data.date.toLocaleDateString('en-GB', { weekday: 'long' })} ${data.date.toLocaleDateString('en-GB')}`;
+
+        const condition = document.createElement('div');
+        condition.classList.add('condition-container');
+        condition.textContent = `${data.avgTempC}C ${getConditionOfDay(data)}`;
+
+        const humidity = document.createElement('div');
+        humidity.classList.add('humidity-container');
+        humidity.textContent = `Humidity: ${data.avgHumidity}%`;
+
+        const wind = document.createElement('div');
+        wind.classList.add('wind-container');
+        wind.textContent = `Wind: ${data.maxWind}km/h`;
+
+        appendChildren(card, [date, condition, humidity, wind]);
+        return card;
+    }
+
+    const createForecastCards = (forecast) => {
+        const cards = [];
+        forecast.forEach((day) => {
+            cards.push(createForecastWeatherCard(day));
+        })
+        return cards;
+    }
+
     const clearWeatherContainer = () => {
         while(weatherContainer.lastChild)
             weatherContainer.removeChild(weatherContainer.lastChild);
     }
 
-    const displayWeatherData = (data) => {
+    const displayWeatherData = (current, forecast) => {
         clearWeatherContainer();
-        displayLocationName(data.location.city, data.location.country);
+        displayLocationName(current.location.city, current.location.country);
         const cardsContainer = document.createElement('div');
         cardsContainer.classList.add('cards-container');
         weatherContainer.appendChild(cardsContainer);
-        cardsContainer.appendChild(createCurrentWeather(data));
+        console.log(current);
+        cardsContainer.appendChild(createCurrentWeatherCard(current));
+        appendChildren(weatherContainer, createForecastCards(forecast));
     }
 
     return { getSearchInput, getSearchButton, displayWeatherData }

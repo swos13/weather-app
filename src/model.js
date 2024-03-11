@@ -38,7 +38,7 @@ const model = (() => {
                 hours.push(getForecastWeatherData(hour));
             })
             const summary = day.day;
-        return new WeatherDay(location.name, location.country, day.date, summary.mintemp_c, summary.maxtemp_c, summary.mintemp_f, summary.maxtemp_f, summary.avgtemp_c, summary.avgtemp_f, hours)
+        return new WeatherDay(location.name, location.country, day.date, summary.mintemp_c, summary.maxtemp_c, summary.mintemp_f, summary.maxtemp_f, summary.avgtemp_c, summary.avgtemp_f, summary.avghumidity, summary.maxwind_kph, hours)
     }
     
     const getForecast = async (city) => {
