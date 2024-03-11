@@ -106,9 +106,8 @@ const view = (() => {
         const cardsContainer = document.createElement('div');
         cardsContainer.classList.add('cards-container');
         weatherContainer.appendChild(cardsContainer);
-        console.log(current);
         cardsContainer.appendChild(createCurrentWeatherCard(current));
-        appendChildren(weatherContainer, createForecastCards(forecast));
+        appendChildren(cardsContainer, createForecastCards(forecast));
     }
 
     return { getSearchInput, getSearchButton, displayWeatherData }
