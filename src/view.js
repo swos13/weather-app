@@ -37,6 +37,7 @@ const view = (() => {
         const time = document.createElement('div');
         time.classList.add('time-container');
         time.textContent = `${data.time.getHours()}:${data.time.getMinutes()}`;
+        if(data.time.getMinutes() === 0) time.textContent += '0';
 
         const condition = document.createElement('div');
         condition.classList.add('condition-container');
@@ -95,6 +96,12 @@ const view = (() => {
         return cards;
     }
 
+    const displayDayDetails = (data, hour) => {
+        if(parseInt((new Date()).getMinutes(), 10) > 30)
+            hour++;
+        return createCurrentWeatherCard(data.hours[hour]);
+    }
+
     const clearWeatherContainer = () => {
         while(weatherContainer.lastChild)
             weatherContainer.removeChild(weatherContainer.lastChild);
@@ -107,7 +114,9 @@ const view = (() => {
         cardsContainer.classList.add('cards-container');
         weatherContainer.appendChild(cardsContainer);
         cardsContainer.appendChild(createCurrentWeatherCard(current));
-        appendChildren(cardsContainer, createForecastCards(forecast));
+        const [today, ...nextDays] = forecast;
+        appendChildren(cardsContainer, createForecastCards(nextDays));
+        weatherContainer.appendChild(displayDayDetails(today, current.time.getHours()));
     }
 
     return { getSearchInput, getSearchButton, displayWeatherData }

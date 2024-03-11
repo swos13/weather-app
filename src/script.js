@@ -8,7 +8,6 @@ const controller = (() => {
 
         Promise.all([model.getCurrentWeather(city), model.getForecast(city), model.getHistory(city, new Date("2024-03-07"))])
         .then((data) => {
-            console.log(data);
             view.displayWeatherData(data[0],data[1]);
         })
     }
