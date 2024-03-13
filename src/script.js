@@ -10,10 +10,8 @@ const controller = (() => {
         const weatherContainer = view.getWeatherContainer();
         const cardsContainer = view.createCardsContainer();
         view.appendChildren(weatherContainer, [cardsContainer]);
-        cardsContainer.appendChild(view.createCurrentWeatherCard(current));
-        const [today, ...nextDays] = forecast;
-        view.appendChildren(cardsContainer, view.createForecastCards(nextDays));
-        weatherContainer.appendChild(view.displayDayDetails(today, current.time.getHours()));
+        view.appendChildren(cardsContainer, view.createForecastCards(forecast));
+        weatherContainer.appendChild(view.displayDayDetails(forecast[0], current.time.getHours()));
     }
 
     const getWeatherData = (city) => {

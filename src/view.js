@@ -82,7 +82,12 @@ const view = (() => {
 
         const date = document.createElement('div');
         date.classList.add('date-container');
-        date.textContent = `${data.date.toLocaleDateString('en-GB', { weekday: 'long' })} ${data.date.toLocaleDateString('en-GB')}`;
+        
+        let day = '';
+        if((new Date()).toLocaleDateString('en-GB') === data.date.toLocaleDateString('en-GB')) day = 'Today';
+        else day = data.date.toLocaleDateString('en-GB', { weekday: 'long' });
+
+        date.textContent = `${day} ${data.date.toLocaleDateString('en-GB')}`;
 
         const conditionData = getConditionOfDay(data.hours.slice(6, 22));
 
