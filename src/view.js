@@ -13,6 +13,10 @@ const view = (() => {
         })
     }
 
+    const removeFromView = (parent, child) => {
+        parent.removeChild(child);
+    }
+
     const createCardsContainer = () => {
         const cardsContainer = document.createElement('div');
         cardsContainer.classList.add('cards-container');
@@ -82,7 +86,7 @@ const view = (() => {
 
         const date = document.createElement('div');
         date.classList.add('date-container');
-        
+
         let day = '';
         if((new Date()).toLocaleDateString('en-GB') === data.date.toLocaleDateString('en-GB')) day = 'Today';
         else day = data.date.toLocaleDateString('en-GB', { weekday: 'long' });
@@ -119,7 +123,11 @@ const view = (() => {
         return cards;
     }
 
-    const displayDayDetails = (data, hour) => {
+    const clearDayDetails = () => {
+        weatherContainer.removeChild(document.querySelector('.details'))
+    }
+
+    const createDayDetails = (data, hour) => {
         if(parseInt((new Date()).getMinutes(), 10) > 30)
             hour++;
         const card = createCurrentWeatherCard(data.hours[hour]);
@@ -132,7 +140,7 @@ const view = (() => {
             weatherContainer.removeChild(weatherContainer.lastChild);
     }
 
-    return { appendChildren, displayLocationName, createCardsContainer, createForecastCards, getWeatherContainer, getSearchInput, getSearchButton, createCurrentWeatherCard, displayDayDetails, clearWeatherContainer }
+    return { appendChildren, removeFromView, displayLocationName, createCardsContainer, createForecastCards, getWeatherContainer, getSearchInput, getSearchButton, createCurrentWeatherCard, clearDayDetails, createDayDetails, clearWeatherContainer }
 })();
 
 export default view;

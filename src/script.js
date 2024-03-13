@@ -10,8 +10,15 @@ const controller = (() => {
         const weatherContainer = view.getWeatherContainer();
         const cardsContainer = view.createCardsContainer();
         view.appendChildren(weatherContainer, [cardsContainer]);
-        view.appendChildren(cardsContainer, view.createForecastCards(forecast));
-        weatherContainer.appendChild(view.displayDayDetails(forecast[0], current.time.getHours()));
+        const forecastCards = view.createForecastCards(forecast);
+        view.appendChildren(cardsContainer, forecastCards);
+        view.appendChildren(weatherContainer, [view.createDayDetails(forecast[0], current.time.getHours())]);
+        for(let i=0; i<forecast.length; i++){
+            forecastCards[i].addEventListener('click', () => {
+                view.clearDayDetails();
+                view.appendChildren(weatherContainer, [view.createDayDetails(forecast[i], current.time.getHours())]);
+            })
+        }
     }
 
     const getWeatherData = (city) => {
