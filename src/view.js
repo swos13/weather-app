@@ -73,7 +73,10 @@ const view = (() => {
 
     const getConditionOfDay = (hours) => {
         const conditions = [];
-        hours.forEach((hour) => conditions.push(hour.condition));
+        hours.forEach((hour) => {
+            if(hour.condition.iconUrl.includes('day'))
+                conditions.push(hour.condition);
+        });
         return conditions.sort((conditionA, conditionB) =>
             conditions.filter(condition => condition.text === conditionA.text).length
             - conditions.filter(condition => condition.text === conditionB.text).length
@@ -93,7 +96,7 @@ const view = (() => {
 
         date.textContent = `${day} ${data.date.toLocaleDateString('en-GB')}`;
 
-        const conditionData = getConditionOfDay(data.hours.slice(6, 22));
+        const conditionData = getConditionOfDay(data.hours);
 
         const icon = document.createElement('img');
         icon.classList.add('icon');
@@ -120,6 +123,7 @@ const view = (() => {
         forecast.forEach((day) => {
             cards.push(createForecastWeatherCard(day));
         })
+
         return cards;
     }
 
