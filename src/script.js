@@ -4,11 +4,23 @@ import "./style.css"
 
 const controller = (() => {
 
+    const displayWeatherData = (current, forecast) => {
+        view.clearWeatherContainer();
+        view.displayLocationName(current.location.city, current.location.country);
+        const weatherContainer = view.getWeatherContainer();
+        const cardsContainer = view.createCardsContainer();
+        view.appendChildren(weatherContainer, [cardsContainer]);
+        cardsContainer.appendChild(view.createCurrentWeatherCard(current));
+        const [today, ...nextDays] = forecast;
+        view.appendChildren(cardsContainer, view.createForecastCards(nextDays));
+        weatherContainer.appendChild(view.displayDayDetails(today, current.time.getHours()));
+    }
+
     const getWeatherData = (city) => {
 
         Promise.all([model.getCurrentWeather(city), model.getForecast(city), model.getHistory(city, new Date("2024-03-07"))])
         .then((data) => {
-            view.displayWeatherData(data[0],data[1]);
+            displayWeatherData(data[0],data[1]);
         })
     }
 

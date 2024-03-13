@@ -37,3 +37,11 @@ body {
 .weather-card {
     border: 1px solid black;
 }
+
+.weather-card > .icon {
+    width: 64px;
+}
+
+.details > .icon {
+    width: 32px;
+}

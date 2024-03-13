@@ -13,6 +13,14 @@ const view = (() => {
         })
     }
 
+    const createCardsContainer = () => {
+        const cardsContainer = document.createElement('div');
+        cardsContainer.classList.add('cards-container');
+        return cardsContainer;
+    }
+
+    const getWeatherContainer = () => weatherContainer;
+
     const displayLocationName = (cityName, countryName) => {
         const locationContainer = document.createElement('div');
         locationContainer.classList.add('location-container');
@@ -78,8 +86,6 @@ const view = (() => {
 
         const conditionData = getConditionOfDay(data.hours.slice(6, 22));
 
-        console.log(conditionData)
-
         const icon = document.createElement('img');
         icon.classList.add('icon');
         icon.src = conditionData.iconUrl;
@@ -111,7 +117,9 @@ const view = (() => {
     const displayDayDetails = (data, hour) => {
         if(parseInt((new Date()).getMinutes(), 10) > 30)
             hour++;
-        return createCurrentWeatherCard(data.hours[hour]);
+        const card = createCurrentWeatherCard(data.hours[hour]);
+        card.classList.add('details');
+        return card;
     }
 
     const clearWeatherContainer = () => {
@@ -119,19 +127,7 @@ const view = (() => {
             weatherContainer.removeChild(weatherContainer.lastChild);
     }
 
-    const displayWeatherData = (current, forecast) => {
-        clearWeatherContainer();
-        displayLocationName(current.location.city, current.location.country);
-        const cardsContainer = document.createElement('div');
-        cardsContainer.classList.add('cards-container');
-        weatherContainer.appendChild(cardsContainer);
-        cardsContainer.appendChild(createCurrentWeatherCard(current));
-        const [today, ...nextDays] = forecast;
-        appendChildren(cardsContainer, createForecastCards(nextDays));
-        weatherContainer.appendChild(displayDayDetails(today, current.time.getHours()));
-    }
-
-    return { getSearchInput, getSearchButton, displayWeatherData }
+    return { appendChildren, displayLocationName, createCardsContainer, createForecastCards, getWeatherContainer, getSearchInput, getSearchButton, createCurrentWeatherCard, displayDayDetails, clearWeatherContainer }
 })();
 
 export default view;
