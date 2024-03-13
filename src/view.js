@@ -39,9 +39,13 @@ const view = (() => {
         time.textContent = `${data.time.getHours()}:${data.time.getMinutes()}`;
         if(data.time.getMinutes() === 0) time.textContent += '0';
 
+        const icon = document.createElement('img');
+        icon.classList.add('icon');
+        icon.src = data.condition.iconUrl;
+
         const condition = document.createElement('div');
         condition.classList.add('condition-container');
-        condition.textContent = `${data.tempC}C ${data.condition}`;
+        condition.textContent = `${data.tempC}C ${data.condition.text}`;
 
         const humidity = document.createElement('div');
         humidity.classList.add('humidity-container');
@@ -51,16 +55,16 @@ const view = (() => {
         wind.classList.add('wind-container');
         wind.textContent = `Wind: ${data.wind}km/h`;
 
-        appendChildren(card, [date, time, condition, humidity, wind]);
+        appendChildren(card, [date, time, icon,condition, humidity, wind]);
         return card;
     }
 
-    const getConditionOfDay = (day) => {
+    const getConditionOfDay = (hours) => {
         const conditions = [];
-        day.hours.forEach((hour) => conditions.push(hour.condition));
+        hours.forEach((hour) => conditions.push(hour.condition));
         return conditions.sort((conditionA, conditionB) =>
-            conditions.filter(condition => condition === conditionA).length
-            - conditions.filter(condition => condition === conditionB).length
+            conditions.filter(condition => condition.text === conditionA.text).length
+            - conditions.filter(condition => condition.text === conditionB.text).length
         ).pop();
     }
 
@@ -72,9 +76,17 @@ const view = (() => {
         date.classList.add('date-container');
         date.textContent = `${data.date.toLocaleDateString('en-GB', { weekday: 'long' })} ${data.date.toLocaleDateString('en-GB')}`;
 
+        const conditionData = getConditionOfDay(data.hours.slice(6, 22));
+
+        console.log(conditionData)
+
+        const icon = document.createElement('img');
+        icon.classList.add('icon');
+        icon.src = conditionData.iconUrl;
+
         const condition = document.createElement('div');
         condition.classList.add('condition-container');
-        condition.textContent = `${data.avgTempC}C ${getConditionOfDay(data)}`;
+        condition.textContent = `${data.avgTempC}C ${conditionData.text}`;
 
         const humidity = document.createElement('div');
         humidity.classList.add('humidity-container');
@@ -84,7 +96,7 @@ const view = (() => {
         wind.classList.add('wind-container');
         wind.textContent = `Wind: ${data.maxWind}km/h`;
 
-        appendChildren(card, [date, condition, humidity, wind]);
+        appendChildren(card, [date, icon, condition, humidity, wind]);
         return card;
     }
 

@@ -1,7 +1,9 @@
+import Condition from './condition'
+
 class Weather {
-    constructor(time, condition, tempC, tempF, tempFeelsC, tempFeelsF, wind, humidity, isDay){
+    constructor(time, iconUrl, conditionText, tempC, tempF, tempFeelsC, tempFeelsF, wind, humidity, isDay){
         this.time = new Date(time);
-        this.condition = condition;
+        this.condition = new Condition(iconUrl, conditionText);
         this.tempC = tempC;
         this.tempF = tempF;
         this.tempFeelsC = tempFeelsC;

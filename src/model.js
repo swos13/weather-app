@@ -10,8 +10,8 @@ const model = (() => {
     }
 
     const getWeatherData = (object) => {
-        const {condition: {text}, temp_c, temp_f, feelslike_c, feelslike_f, wind_kph, humidity, is_day} = object;
-        return [text, temp_c, temp_f, feelslike_c, feelslike_f, wind_kph, humidity, is_day];
+        const {condition: {icon, text}, temp_c, temp_f, feelslike_c, feelslike_f, wind_kph, humidity, is_day} = object;
+        return [icon, text, temp_c, temp_f, feelslike_c, feelslike_f, wind_kph, humidity, is_day];
     }
     
     const getCurrentWeatherData = (location, weatherData) => {
