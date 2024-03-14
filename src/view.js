@@ -38,13 +38,31 @@ const view = (() => {
         weatherContainer.appendChild(locationContainer);
     }
 
-    const createCurrentWeatherCard = (data) => {
+    const createCard = (className) => {
         const card = document.createElement('div');
-        card.classList.add('weather-card');
+        card.classList.add(className);
+        return card;
+    }
+
+    const createCardWithDate = (dateData) => {
+        const card = createCard('weather-card');
 
         const date = document.createElement('div');
         date.classList.add('date-container');
-        date.textContent = `Today ${data.time.toLocaleDateString('en-GB')}`;
+
+        let day = '';
+        if((new Date()).toLocaleDateString('en-GB') === dateData.toLocaleDateString('en-GB')) day = 'Today';
+        else day = dateData.toLocaleDateString('en-GB', { weekday: 'long' });
+
+        date.textContent = `${day} ${dateData.toLocaleDateString('en-GB')}`;
+
+        card.appendChild(date);
+
+        return card;
+    }
+
+    const createCurrentWeatherCard = (data) => {
+        const card = createCardWithDate(data.time);
 
         const time = document.createElement('div');
         time.classList.add('time-container');
@@ -67,7 +85,7 @@ const view = (() => {
         wind.classList.add('wind-container');
         wind.textContent = `Wind: ${data.wind}km/h`;
 
-        appendChildren(card, [date, time, icon,condition, humidity, wind]);
+        appendChildren(card, [time, icon,condition, humidity, wind]);
         return card;
     }
 
@@ -84,17 +102,7 @@ const view = (() => {
     }
 
     const createForecastWeatherCard = (data) => {
-        const card = document.createElement('div');
-        card.classList.add('weather-card');
-
-        const date = document.createElement('div');
-        date.classList.add('date-container');
-
-        let day = '';
-        if((new Date()).toLocaleDateString('en-GB') === data.date.toLocaleDateString('en-GB')) day = 'Today';
-        else day = data.date.toLocaleDateString('en-GB', { weekday: 'long' });
-
-        date.textContent = `${day} ${data.date.toLocaleDateString('en-GB')}`;
+        const card = createCardWithDate(data.date);
 
         const conditionData = getConditionOfDay(data.hours);
 
@@ -114,7 +122,7 @@ const view = (() => {
         wind.classList.add('wind-container');
         wind.textContent = `Wind: ${data.maxWind}km/h`;
 
-        appendChildren(card, [date, icon, condition, humidity, wind]);
+        appendChildren(card, [icon, condition, humidity, wind]);
         return card;
     }
 
@@ -135,6 +143,7 @@ const view = (() => {
         if(parseInt((new Date()).getMinutes(), 10) > 30)
             hour++;
         const card = createCurrentWeatherCard(data.hours[hour]);
+        // add each hour with link - first add day name with date, then all hours and then details of these hours
         card.classList.add('details');
         return card;
     }
