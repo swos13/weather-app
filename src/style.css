@@ -23,11 +23,14 @@ body {
 
 .location-container {
     text-align: center;
+    margin: 32px auto;
 }
 
 .cards-container {
     display: flex;
     justify-content: center;
+    gap: 32px;
+    margin-bottom: 32px;
 }
 
 .cards-container > .weather-card {
