@@ -9,6 +9,8 @@ const controller = (() => {
         view.displayLocationName(current.location.city, current.location.country);
         const weatherContainer = view.getWeatherContainer();
         const cardsContainer = view.createCardsContainer();
+        const [leftButton, rightButton] = view.createButtons();
+        view.appendChildren(cardsContainer, [leftButton, rightButton]);
         view.appendChildren(weatherContainer, [cardsContainer]);
         const forecastCards = view.createForecastCards(forecast);
         view.appendChildren(cardsContainer, forecastCards);

@@ -27,10 +27,23 @@ body {
 }
 
 .cards-container {
+    position: relative;
     display: flex;
     justify-content: center;
     gap: 32px;
     margin-bottom: 32px;
+}
+
+.left-button {
+    position: absolute;
+    top: 50%;
+    right: 100%;
+}
+
+.right-button {
+    position: absolute;
+    top: 50%;
+    left: 100%;
 }
 
 .cards-container > .weather-card {
