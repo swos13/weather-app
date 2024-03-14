@@ -47,16 +47,28 @@ body {
 }
 
 .hours-container {
+    margin-right: auto;
+    margin-left: auto;
     font-size: 0.8rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(24px, 1fr));
-    gap: 8px;
+    display: inline-flex;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 .hour {
     color: #999999;
 }
 
-.hour.active {
+.hour-container.active > .hour {
     color: black;
+}
+
+.hour-container > .icon {
+    width: 24px;
+}
+
+.hour-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

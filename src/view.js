@@ -62,10 +62,6 @@ const view = (() => {
     }
 
     const createCurrentWeather = (data) => {
-        const icon = document.createElement('img');
-        icon.classList.add('icon');
-        icon.src = data.condition.iconUrl;
-
         const condition = document.createElement('div');
         condition.classList.add('condition-container');
         condition.textContent = `${data.tempC}C ${data.condition.text}`;
@@ -78,7 +74,7 @@ const view = (() => {
         wind.classList.add('wind-container');
         wind.textContent = `Wind: ${data.wind}km/h`;
 
-        return [icon, condition, humidity, wind];
+        return [condition, humidity, wind];
     }
 
     const createCurrentWeatherCard = (data) => {
@@ -89,7 +85,11 @@ const view = (() => {
         time.textContent = `${data.time.getHours()}:${data.time.getMinutes()}`;
         if(data.time.getMinutes() === 0) time.textContent += '0';
 
-        appendChildren(card, [time, ...createCurrentWeather(data)]);
+        const icon = document.createElement('img');
+        icon.classList.add('icon');
+        icon.src = data.condition.iconUrl;
+
+        appendChildren(card, [time, icon, ...createCurrentWeather(data)]);
         return card;
     }
 
@@ -151,18 +151,27 @@ const view = (() => {
         const hoursContainer = document.createElement('div');
         hoursContainer.classList.add('hours-container');
         data.hours.forEach((hour) => {
+            const hourContainer = document.createElement('div');
+            hourContainer.classList.add('hour-container');
+
             const text = document.createElement('a');
             text.classList.add('hour');
             text.textContent = `${hour.time.getHours()}:00`;
-            hoursContainer.appendChild(text);
 
-            text.addEventListener('click', () => {
-                document.querySelector('.hour.active').classList.remove('active');
-                text.classList.add('active');
+            const icon = document.createElement('img');
+            icon.classList.add('icon');
+            icon.src = hour.condition.iconUrl;
+
+            hourContainer.addEventListener('click', () => {
+                document.querySelector('.hour-container.active').classList.remove('active');
+                hourContainer.classList.add('active');
                 while(card.lastChild && card.lastChild !== hoursContainer)
                     card.removeChild(card.lastChild)
                 appendChildren(card, createCurrentWeather(data.hours[hour.time.getHours()]));
             })
+
+            appendChildren(hourContainer, [text, icon]);
+            hoursContainer.appendChild(hourContainer);
         })
         hoursContainer.children.item(currentHour).classList.add('active');
         card.appendChild(hoursContainer);
