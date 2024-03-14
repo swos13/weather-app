@@ -45,3 +45,18 @@ body {
 .details > .icon {
     width: 32px;
 }
+
+.hours-container {
+    font-size: 0.8rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(24px, 1fr));
+    gap: 8px;
+}
+
+.hour {
+    color: #999999;
+}
+
+.hour.active {
+    color: black;
+}

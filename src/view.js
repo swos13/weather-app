@@ -61,14 +61,7 @@ const view = (() => {
         return card;
     }
 
-    const createCurrentWeatherCard = (data) => {
-        const card = createCardWithDate(data.time);
-
-        const time = document.createElement('div');
-        time.classList.add('time-container');
-        time.textContent = `${data.time.getHours()}:${data.time.getMinutes()}`;
-        if(data.time.getMinutes() === 0) time.textContent += '0';
-
+    const createCurrentWeather = (data) => {
         const icon = document.createElement('img');
         icon.classList.add('icon');
         icon.src = data.condition.iconUrl;
@@ -85,7 +78,18 @@ const view = (() => {
         wind.classList.add('wind-container');
         wind.textContent = `Wind: ${data.wind}km/h`;
 
-        appendChildren(card, [time, icon,condition, humidity, wind]);
+        return [icon, condition, humidity, wind];
+    }
+
+    const createCurrentWeatherCard = (data) => {
+        const card = createCardWithDate(data.time);
+
+        const time = document.createElement('div');
+        time.classList.add('time-container');
+        time.textContent = `${data.time.getHours()}:${data.time.getMinutes()}`;
+        if(data.time.getMinutes() === 0) time.textContent += '0';
+
+        appendChildren(card, [time, ...createCurrentWeather(data)]);
         return card;
     }
 
@@ -139,12 +143,24 @@ const view = (() => {
         weatherContainer.removeChild(document.querySelector('.details'))
     }
 
-    const createDayDetails = (data, hour) => {
+    const createDayDetails = (data, currentHour) => {
         if(parseInt((new Date()).getMinutes(), 10) > 30)
-            hour++;
-        const card = createCurrentWeatherCard(data.hours[hour]);
-        // add each hour with link - first add day name with date, then all hours and then details of these hours
+            currentHour++;
+        const card = createCardWithDate(data.hours[currentHour].time);
         card.classList.add('details');
+        const hoursContainer = document.createElement('div');
+        hoursContainer.classList.add('hours-container');
+        data.hours.forEach((hour) => {
+            const text = document.createElement('a');
+            text.classList.add('hour');
+            text.textContent = `${hour.time.getHours()}:00`;
+            hoursContainer.appendChild(text);
+        })
+        hoursContainer.children.item(currentHour).classList.add('active');
+        card.appendChild(hoursContainer);
+        const weatherData = createCurrentWeather(data.hours[currentHour])
+        appendChildren(card, weatherData);
+        // add each hour with link - first add day name with date, then all hours and then details of these hours
         return card;
     }
 
