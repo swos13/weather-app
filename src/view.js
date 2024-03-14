@@ -155,12 +155,19 @@ const view = (() => {
             text.classList.add('hour');
             text.textContent = `${hour.time.getHours()}:00`;
             hoursContainer.appendChild(text);
+
+            text.addEventListener('click', () => {
+                document.querySelector('.hour.active').classList.remove('active');
+                text.classList.add('active');
+                while(card.lastChild && card.lastChild !== hoursContainer)
+                    card.removeChild(card.lastChild)
+                appendChildren(card, createCurrentWeather(data.hours[hour.time.getHours()]));
+            })
         })
         hoursContainer.children.item(currentHour).classList.add('active');
         card.appendChild(hoursContainer);
-        const weatherData = createCurrentWeather(data.hours[currentHour])
+        const weatherData = createCurrentWeather(data.hours[currentHour]);
         appendChildren(card, weatherData);
-        // add each hour with link - first add day name with date, then all hours and then details of these hours
         return card;
     }
 
