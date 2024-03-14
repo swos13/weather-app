@@ -13,6 +13,18 @@ const view = (() => {
         })
     }
 
+    const removeFromView = (parent, child) => {
+        parent.removeChild(child);
+    }
+
+    const createCardsContainer = () => {
+        const cardsContainer = document.createElement('div');
+        cardsContainer.classList.add('cards-container');
+        return cardsContainer;
+    }
+
+    const getWeatherContainer = () => weatherContainer;
+
     const displayLocationName = (cityName, countryName) => {
         const locationContainer = document.createElement('div');
         locationContainer.classList.add('location-container');
@@ -26,22 +38,37 @@ const view = (() => {
         weatherContainer.appendChild(locationContainer);
     }
 
-    const createCurrentWeatherCard = (data) => {
+    const createCard = (className) => {
         const card = document.createElement('div');
-        card.classList.add('weather-card');
+        card.classList.add(className);
+        return card;
+    }
+
+    const createCardWithDate = (dateData) => {
+        const card = createCard('weather-card');
 
         const date = document.createElement('div');
         date.classList.add('date-container');
-        date.textContent = `Today ${data.time.toLocaleDateString('en-GB')}`;
 
-        const time = document.createElement('div');
-        time.classList.add('time-container');
-        time.textContent = `${data.time.getHours()}:${data.time.getMinutes()}`;
-        if(data.time.getMinutes() === 0) time.textContent += '0';
+        let day = '';
+        if((new Date()).toLocaleDateString('en-GB') === dateData.toLocaleDateString('en-GB')) day = 'Today';
+        else day = dateData.toLocaleDateString('en-GB', { weekday: 'long' });
+
+        date.textContent = `${day} ${dateData.toLocaleDateString('en-GB')}`;
+
+        card.appendChild(date);
+
+        return card;
+    }
+
+    const createCurrentWeather = (data) => {
+        const icon = document.createElement('img');
+        icon.classList.add('icon');
+        icon.src = data.condition.iconUrl;
 
         const condition = document.createElement('div');
         condition.classList.add('condition-container');
-        condition.textContent = `${data.tempC}C ${data.condition}`;
+        condition.textContent = `${data.tempC}C ${data.condition.text}`;
 
         const humidity = document.createElement('div');
         humidity.classList.add('humidity-container');
@@ -51,30 +78,45 @@ const view = (() => {
         wind.classList.add('wind-container');
         wind.textContent = `Wind: ${data.wind}km/h`;
 
-        appendChildren(card, [date, time, condition, humidity, wind]);
+        return [icon, condition, humidity, wind];
+    }
+
+    const createCurrentWeatherCard = (data) => {
+        const card = createCardWithDate(data.time);
+
+        const time = document.createElement('div');
+        time.classList.add('time-container');
+        time.textContent = `${data.time.getHours()}:${data.time.getMinutes()}`;
+        if(data.time.getMinutes() === 0) time.textContent += '0';
+
+        appendChildren(card, [time, ...createCurrentWeather(data)]);
         return card;
     }
 
-    const getConditionOfDay = (day) => {
+    const getConditionOfDay = (hours) => {
         const conditions = [];
-        day.hours.forEach((hour) => conditions.push(hour.condition));
+        hours.forEach((hour) => {
+            if(hour.condition.iconUrl.includes('day'))
+                conditions.push(hour.condition);
+        });
         return conditions.sort((conditionA, conditionB) =>
-            conditions.filter(condition => condition === conditionA).length
-            - conditions.filter(condition => condition === conditionB).length
+            conditions.filter(condition => condition.text === conditionA.text).length
+            - conditions.filter(condition => condition.text === conditionB.text).length
         ).pop();
     }
 
     const createForecastWeatherCard = (data) => {
-        const card = document.createElement('div');
-        card.classList.add('weather-card');
+        const card = createCardWithDate(data.date);
 
-        const date = document.createElement('div');
-        date.classList.add('date-container');
-        date.textContent = `${data.date.toLocaleDateString('en-GB', { weekday: 'long' })} ${data.date.toLocaleDateString('en-GB')}`;
+        const conditionData = getConditionOfDay(data.hours);
+
+        const icon = document.createElement('img');
+        icon.classList.add('icon');
+        icon.src = conditionData.iconUrl;
 
         const condition = document.createElement('div');
         condition.classList.add('condition-container');
-        condition.textContent = `${data.avgTempC}C ${getConditionOfDay(data)}`;
+        condition.textContent = `${data.avgTempC}C ${conditionData.text}`;
 
         const humidity = document.createElement('div');
         humidity.classList.add('humidity-container');
@@ -84,7 +126,7 @@ const view = (() => {
         wind.classList.add('wind-container');
         wind.textContent = `Wind: ${data.maxWind}km/h`;
 
-        appendChildren(card, [date, condition, humidity, wind]);
+        appendChildren(card, [icon, condition, humidity, wind]);
         return card;
     }
 
@@ -93,13 +135,40 @@ const view = (() => {
         forecast.forEach((day) => {
             cards.push(createForecastWeatherCard(day));
         })
+
         return cards;
     }
 
-    const displayDayDetails = (data, hour) => {
+    const clearDayDetails = () => {
+        weatherContainer.removeChild(document.querySelector('.details'))
+    }
+
+    const createDayDetails = (data, currentHour) => {
         if(parseInt((new Date()).getMinutes(), 10) > 30)
-            hour++;
-        return createCurrentWeatherCard(data.hours[hour]);
+            currentHour++;
+        const card = createCardWithDate(data.hours[currentHour].time);
+        card.classList.add('details');
+        const hoursContainer = document.createElement('div');
+        hoursContainer.classList.add('hours-container');
+        data.hours.forEach((hour) => {
+            const text = document.createElement('a');
+            text.classList.add('hour');
+            text.textContent = `${hour.time.getHours()}:00`;
+            hoursContainer.appendChild(text);
+
+            text.addEventListener('click', () => {
+                document.querySelector('.hour.active').classList.remove('active');
+                text.classList.add('active');
+                while(card.lastChild && card.lastChild !== hoursContainer)
+                    card.removeChild(card.lastChild)
+                appendChildren(card, createCurrentWeather(data.hours[hour.time.getHours()]));
+            })
+        })
+        hoursContainer.children.item(currentHour).classList.add('active');
+        card.appendChild(hoursContainer);
+        const weatherData = createCurrentWeather(data.hours[currentHour]);
+        appendChildren(card, weatherData);
+        return card;
     }
 
     const clearWeatherContainer = () => {
@@ -107,19 +176,7 @@ const view = (() => {
             weatherContainer.removeChild(weatherContainer.lastChild);
     }
 
-    const displayWeatherData = (current, forecast) => {
-        clearWeatherContainer();
-        displayLocationName(current.location.city, current.location.country);
-        const cardsContainer = document.createElement('div');
-        cardsContainer.classList.add('cards-container');
-        weatherContainer.appendChild(cardsContainer);
-        cardsContainer.appendChild(createCurrentWeatherCard(current));
-        const [today, ...nextDays] = forecast;
-        appendChildren(cardsContainer, createForecastCards(nextDays));
-        weatherContainer.appendChild(displayDayDetails(today, current.time.getHours()));
-    }
-
-    return { getSearchInput, getSearchButton, displayWeatherData }
+    return { appendChildren, removeFromView, displayLocationName, createCardsContainer, createForecastCards, getWeatherContainer, getSearchInput, getSearchButton, createCurrentWeatherCard, clearDayDetails, createDayDetails, clearWeatherContainer }
 })();
 
 export default view;

@@ -4,11 +4,28 @@ import "./style.css"
 
 const controller = (() => {
 
+    const displayWeatherData = (current, forecast) => {
+        view.clearWeatherContainer();
+        view.displayLocationName(current.location.city, current.location.country);
+        const weatherContainer = view.getWeatherContainer();
+        const cardsContainer = view.createCardsContainer();
+        view.appendChildren(weatherContainer, [cardsContainer]);
+        const forecastCards = view.createForecastCards(forecast);
+        view.appendChildren(cardsContainer, forecastCards);
+        view.appendChildren(weatherContainer, [view.createDayDetails(forecast[0], current.time.getHours())]);
+        for(let i=0; i<forecast.length; i++){
+            forecastCards[i].addEventListener('click', () => {
+                view.clearDayDetails();
+                view.appendChildren(weatherContainer, [view.createDayDetails(forecast[i], current.time.getHours())]);
+            })
+        }
+    }
+
     const getWeatherData = (city) => {
 
         Promise.all([model.getCurrentWeather(city), model.getForecast(city), model.getHistory(city, new Date("2024-03-07"))])
         .then((data) => {
-            view.displayWeatherData(data[0],data[1]);
+            displayWeatherData(data[0],data[1]);
         })
     }
 
