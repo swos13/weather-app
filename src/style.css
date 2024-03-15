@@ -27,9 +27,8 @@ body {
 }
 
 .cards-container {
+    height: 240px;
     position: relative;
-    display: flex;
-    justify-content: center;
     gap: 32px;
     margin-bottom: 32px;
 }
@@ -47,7 +46,9 @@ body {
 }
 
 .cards-container > .weather-card {
-    flex: 1;
+    width: calc((100% - 64px) / 3);
+    height: 100%;
+    position: absolute;
 }
 
 .weather-card {

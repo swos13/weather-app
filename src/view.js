@@ -23,6 +23,17 @@ const view = (() => {
         return cardsContainer;
     }
 
+    const putItemsInCardsContainer = (cardsContainer, items) => {
+        appendChildren(cardsContainer, items);
+        const translateLength = Math.floor((cardsContainer.offsetWidth-64)/3);
+        console.log(translateLength)
+        console.log(items)
+        items[0].style.width = `${translateLength}`;
+        for(let i=1; i<items.length; i++){
+            items[i].style.transform = `translateX(${(translateLength+32)*i}px)`;
+        }
+    }
+
     const createButtons = () => {
         const leftButton = document.createElement('button');
         leftButton.classList.add('left-button');
@@ -197,7 +208,7 @@ const view = (() => {
             weatherContainer.removeChild(weatherContainer.lastChild);
     }
 
-    return { appendChildren, removeFromView, displayLocationName, createCardsContainer, createButtons, createForecastCards, getWeatherContainer, getSearchInput, getSearchButton, createCurrentWeatherCard, clearDayDetails, createDayDetails, clearWeatherContainer }
+    return { appendChildren, removeFromView, displayLocationName, createCardsContainer, putItemsInCardsContainer, createButtons, createForecastCards, getWeatherContainer, getSearchInput, getSearchButton, createCurrentWeatherCard, clearDayDetails, createDayDetails, clearWeatherContainer }
 })();
 
 export default view;

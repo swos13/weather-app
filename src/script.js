@@ -13,7 +13,7 @@ const controller = (() => {
         view.appendChildren(cardsContainer, [leftButton, rightButton]);
         view.appendChildren(weatherContainer, [cardsContainer]);
         const forecastCards = view.createForecastCards(forecast);
-        view.appendChildren(cardsContainer, forecastCards);
+        view.putItemsInCardsContainer(cardsContainer, forecastCards);
         view.appendChildren(weatherContainer, [view.createDayDetails(forecast[0], current.time.getHours())]);
         for(let i=0; i<forecast.length; i++){
             forecastCards[i].addEventListener('click', () => {
