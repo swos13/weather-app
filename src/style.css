@@ -26,11 +26,15 @@ body {
     margin: 32px auto;
 }
 
+.slider {
+    position: relative;
+}
+
 .cards-container {
     height: 240px;
-    position: relative;
     gap: 32px;
     margin-bottom: 32px;
+    overflow: hidden;
 }
 
 .left-button {
@@ -46,6 +50,7 @@ body {
 }
 
 .cards-container > .weather-card {
+    box-sizing: border-box;
     width: calc((100% - 64px) / 3);
     height: 100%;
     position: absolute;

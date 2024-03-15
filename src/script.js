@@ -4,23 +4,29 @@ import "./style.css"
 
 const controller = (() => {
 
+    let currentCards = [];
+
     const displayWeatherData = (current, forecast) => {
         view.clearWeatherContainer();
         view.displayLocationName(current.location.city, current.location.country);
         const weatherContainer = view.getWeatherContainer();
+        const slider = view.createSliderContainer();
         const cardsContainer = view.createCardsContainer();
         const [leftButton, rightButton] = view.createButtons();
-        view.appendChildren(cardsContainer, [leftButton, rightButton]);
-        view.appendChildren(weatherContainer, [cardsContainer]);
-        const forecastCards = view.createForecastCards(forecast);
-        view.putItemsInCardsContainer(cardsContainer, forecastCards);
+        view.appendChildren(slider, [leftButton, cardsContainer, rightButton]);
+        view.appendChildren(weatherContainer, [slider]);
+        currentCards = view.createForecastCards(forecast);
+        view.putItemsInCardsContainer(cardsContainer, currentCards);
         view.appendChildren(weatherContainer, [view.createDayDetails(forecast[0], current.time.getHours())]);
         for(let i=0; i<forecast.length; i++){
-            forecastCards[i].addEventListener('click', () => {
+            currentCards[i].addEventListener('click', () => {
                 view.clearDayDetails();
                 view.appendChildren(weatherContainer, [view.createDayDetails(forecast[i], current.time.getHours())]);
             })
         }
+        window.addEventListener('resize', () => {
+            view.translateItems(cardsContainer, currentCards);
+        })
     }
 
     const getWeatherData = (city) => {

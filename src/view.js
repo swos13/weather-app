@@ -17,21 +17,30 @@ const view = (() => {
         parent.removeChild(child);
     }
 
+    const createSliderContainer = () => {
+        const slider = document.createElement('div');
+        slider.classList.add('slider');
+        return slider;
+    }
+
     const createCardsContainer = () => {
         const cardsContainer = document.createElement('div');
         cardsContainer.classList.add('cards-container');
         return cardsContainer;
     }
 
-    const putItemsInCardsContainer = (cardsContainer, items) => {
-        appendChildren(cardsContainer, items);
+    const translateItems = (cardsContainer, items) => {
         const translateLength = Math.floor((cardsContainer.offsetWidth-64)/3);
-        console.log(translateLength)
-        console.log(items)
         items[0].style.width = `${translateLength}`;
         for(let i=1; i<items.length; i++){
             items[i].style.transform = `translateX(${(translateLength+32)*i}px)`;
         }
+    }
+
+    const putItemsInCardsContainer = (cardsContainer, items) => {
+        while(cardsContainer.lastChild) cardsContainer.removeChild(cardsContainer.lastChild);
+        appendChildren(cardsContainer, items);
+        translateItems(cardsContainer, items);
     }
 
     const createButtons = () => {
@@ -208,7 +217,7 @@ const view = (() => {
             weatherContainer.removeChild(weatherContainer.lastChild);
     }
 
-    return { appendChildren, removeFromView, displayLocationName, createCardsContainer, putItemsInCardsContainer, createButtons, createForecastCards, getWeatherContainer, getSearchInput, getSearchButton, createCurrentWeatherCard, clearDayDetails, createDayDetails, clearWeatherContainer }
+    return { appendChildren, removeFromView, displayLocationName, createSliderContainer, createCardsContainer, translateItems, putItemsInCardsContainer, createButtons, createForecastCards, getWeatherContainer, getSearchInput, getSearchButton, createCurrentWeatherCard, clearDayDetails, createDayDetails, clearWeatherContainer }
 })();
 
 export default view;
