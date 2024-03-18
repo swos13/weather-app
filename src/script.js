@@ -20,23 +20,32 @@ const controller = (() => {
         view.appendChildren(weatherContainer, [view.createDayDetails(forecast[0], current.time.getHours())]);
         const cards = Array.from(forecastCards);
         view.slideRight(cards);
+        let [leftmostCardId, rightmostCardId] = [0, 2]
         /*
         Add eventlisteners for buttons, a click should add another card and then translate everything
         Card maybe should be in the map - each one having a translateX value as key - only show the ones with 0, x and 2x translations (might be already done with overflow: hidden)
         on each click check if date doesnt exceed max or min (2 days ahead and unntil 1st Jan of 2010)
         */
         leftButton.addEventListener('click', () => {
-            const previousDate = model.allData[0].date;
-            previousDate.setDate(previousDate.getDate() - 1);
-            model.getHistory(city, previousDate).then((data) => {
-                model.allData.unshift(data);
-                const newCard = view.createForecastWeatherCard(data);
-                cards.unshift(newCard);
-                const translationValue = -view.getTranslation();
-                view.translateCard(newCard, translationValue);
-                cardsContainer.insertBefore(newCard, cardsContainer.firstChild);
+            if(leftmostCardId === 0){
+                const previousDate = model.allData[0].date;
+                previousDate.setDate(previousDate.getDate() - 1);
+                if(model.isDataAvailable(previousDate)){
+                    model.getHistory(city, previousDate).then((data) => {
+                        model.allData.unshift(data);
+                        const newCard = view.createForecastWeatherCard(data);
+                        cards.unshift(newCard);
+                        const translationValue = -view.getTranslation();
+                        view.translateCard(newCard, translationValue);
+                        cardsContainer.insertBefore(newCard, cardsContainer.firstChild);
+                        view.slideRight(cards);
+                    })
+                }
+            }
+            else {
+                leftmostCardId--;
                 view.slideRight(cards);
-            })
+            }
             
         })
 
