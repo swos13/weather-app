@@ -31,7 +31,7 @@ const controller = (() => {
 
     const getWeatherData = (city) => {
 
-        Promise.all([model.getCurrentWeather(city), model.getForecast(city), model.getHistory(city, new Date("2024-03-07"))])
+        Promise.all([model.getCurrentWeather(city), model.getForecast(city), model.getHistory(city)])
         .then((data) => {
             displayWeatherData(data[0],data[1]);
         })

@@ -21,7 +21,7 @@ const weatherAPI = (() => {
     }
 
     const getHistory = async (city, date) => {
-        const response = await fetch(`https://api.weatherapi.com/v1/history.json?key=${key}&q=${city}&dt=${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`);
+        const response = await fetch(`https://api.weatherapi.com/v1/history.json?key=${key}&q=${city}&dt=${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`);
         const historyData = await response.json();
         return historyData;
     }
