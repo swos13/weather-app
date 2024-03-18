@@ -3,6 +3,7 @@ const view = (() => {
     const searchInput = document.querySelector("#city-name-input");
     const searchButton = document.querySelector(".search-button");
     const weatherContainer = document.querySelector(".weather-container");
+    let cardsContainer;
 
     const getSearchInput = () => searchInput;
     const getSearchButton = () => searchButton;
@@ -24,23 +25,28 @@ const view = (() => {
     }
 
     const createCardsContainer = () => {
-        const cardsContainer = document.createElement('div');
+        cardsContainer = document.createElement('div');
         cardsContainer.classList.add('cards-container');
         return cardsContainer;
     }
 
-    const translateItems = (cardsContainer, items) => {
-        const translateLength = Math.floor((cardsContainer.offsetWidth-64)/3);
-        items[0].style.width = `${translateLength}`;
-        for(let i=1; i<items.length; i++){
-            items[i].style.transform = `translateX(${(translateLength+32)*i}px)`;
-        }
+    const getWidthOfForecastCard = () => Math.floor((cardsContainer.offsetWidth-64)/3);
+
+    const getTranslation = () => getWidthOfForecastCard()+32;
+
+    const translateCard = (card, translation) => {
+        card.style.transform = `translateX(${translation}px)`;
     }
 
-    const putItemsInCardsContainer = (cardsContainer, items) => {
+    const slideRight = (cards) => {
+        const translationX = getTranslation();
+        for(let i = 0; i < cards.length; i++)
+            translateCard(cards[i],i*translationX);
+    }
+
+    const putItemsInCardsContainer = (items) => {
         while(cardsContainer.lastChild) cardsContainer.removeChild(cardsContainer.lastChild);
         appendChildren(cardsContainer, items);
-        translateItems(cardsContainer, items);
     }
 
     const createButtons = () => {
@@ -137,40 +143,6 @@ const view = (() => {
         ).pop();
     }
 
-    const createForecastWeatherCard = (data) => {
-        const card = createCardWithDate(data.date);
-
-        const conditionData = getConditionOfDay(data.hours);
-
-        const icon = document.createElement('img');
-        icon.classList.add('icon');
-        icon.src = conditionData.iconUrl;
-
-        const condition = document.createElement('div');
-        condition.classList.add('condition-container');
-        condition.textContent = `${data.avgTempC}C ${conditionData.text}`;
-
-        const humidity = document.createElement('div');
-        humidity.classList.add('humidity-container');
-        humidity.textContent = `Humidity: ${data.avgHumidity}%`;
-
-        const wind = document.createElement('div');
-        wind.classList.add('wind-container');
-        wind.textContent = `Wind: ${data.maxWind}km/h`;
-
-        appendChildren(card, [icon, condition, humidity, wind]);
-        return card;
-    }
-
-    const createForecastCards = (forecast) => {
-        const cards = [];
-        forecast.forEach((day) => {
-            cards.push(createForecastWeatherCard(day));
-        })
-
-        return cards;
-    }
-
     const clearDayDetails = () => {
         weatherContainer.removeChild(document.querySelector('.details'))
     }
@@ -217,7 +189,53 @@ const view = (() => {
             weatherContainer.removeChild(weatherContainer.lastChild);
     }
 
-    return { appendChildren, removeFromView, displayLocationName, createSliderContainer, createCardsContainer, translateItems, putItemsInCardsContainer, createButtons, createForecastCards, getWeatherContainer, getSearchInput, getSearchButton, createCurrentWeatherCard, clearDayDetails, createDayDetails, clearWeatherContainer }
+
+    const createForecastWeatherCard = (data) => {
+        const card = createCardWithDate(data.date);
+        card.style.width = `${getWidthOfForecastCard()}`;
+
+        const conditionData = getConditionOfDay(data.hours);
+
+        const icon = document.createElement('img');
+        icon.classList.add('icon');
+        icon.src = conditionData.iconUrl;
+
+        const condition = document.createElement('div');
+        condition.classList.add('condition-container');
+        condition.textContent = `${data.avgTempC}C ${conditionData.text}`;
+
+        const humidity = document.createElement('div');
+        humidity.classList.add('humidity-container');
+        humidity.textContent = `Humidity: ${data.avgHumidity}%`;
+
+        const wind = document.createElement('div');
+        wind.classList.add('wind-container');
+        wind.textContent = `Wind: ${data.maxWind}km/h`;
+
+        appendChildren(card, [icon, condition, humidity, wind]);
+
+        card.addEventListener('click', () => {
+            clearDayDetails();
+            appendChildren(weatherContainer, [createDayDetails(data, (new Date()).getHours())]);
+        });
+        
+        return card;
+    }
+
+    const createForecastCards = (forecast) => {
+        const cards = [];
+        forecast.forEach((day) => {
+            cards.push(createForecastWeatherCard(day));
+        })
+        return cards;
+    }
+
+    return { appendChildren, removeFromView, displayLocationName, getTranslation, 
+        createSliderContainer, createCardsContainer, translateCard, 
+        slideRight, putItemsInCardsContainer, createButtons, createForecastCards, 
+        getWeatherContainer, getSearchInput, getSearchButton, 
+        createCurrentWeatherCard, clearDayDetails, createForecastWeatherCard,
+        createDayDetails, clearWeatherContainer }
 })();
 
 export default view;

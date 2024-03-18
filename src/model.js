@@ -5,6 +5,8 @@ import weatherAPI from "./weatherAPI"
 
 const model = (() => {
 
+    const allData = [];
+
     const setUp = () => {
         weatherAPI.setKey();
     }
@@ -61,7 +63,7 @@ const model = (() => {
         return getWeatherDay(forecastday[0], location);
     }
 
-    return { setUp, getCurrentWeather, getForecast, getHistory }
+    return { allData, setUp, getCurrentWeather, getForecast, getHistory }
 })();
 
 export default model;

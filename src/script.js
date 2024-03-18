@@ -4,9 +4,8 @@ import "./style.css"
 
 const controller = (() => {
 
-    let currentCards = [];
 
-    const displayWeatherData = (current, forecast) => {
+    const displayWeatherData = (city, current, forecast) => {
         view.clearWeatherContainer();
         view.displayLocationName(current.location.city, current.location.country);
         const weatherContainer = view.getWeatherContainer();
@@ -15,25 +14,41 @@ const controller = (() => {
         const [leftButton, rightButton] = view.createButtons();
         view.appendChildren(slider, [leftButton, cardsContainer, rightButton]);
         view.appendChildren(weatherContainer, [slider]);
-        currentCards = view.createForecastCards(forecast);
-        view.putItemsInCardsContainer(cardsContainer, currentCards);
+        const forecastCards = view.createForecastCards(forecast);
+        model.allData = forecast;
+        view.putItemsInCardsContainer(forecastCards);
         view.appendChildren(weatherContainer, [view.createDayDetails(forecast[0], current.time.getHours())]);
-        for(let i=0; i<forecast.length; i++){
-            currentCards[i].addEventListener('click', () => {
-                view.clearDayDetails();
-                view.appendChildren(weatherContainer, [view.createDayDetails(forecast[i], current.time.getHours())]);
+        const cards = Array.from(forecastCards);
+        view.slideRight(cards);
+        /*
+        Add eventlisteners for buttons, a click should add another card and then translate everything
+        Card maybe should be in the map - each one having a translateX value as key - only show the ones with 0, x and 2x translations (might be already done with overflow: hidden)
+        on each click check if date doesnt exceed max or min (2 days ahead and unntil 1st Jan of 2010)
+        */
+        leftButton.addEventListener('click', () => {
+            const previousDate = model.allData[0].date;
+            previousDate.setDate(previousDate.getDate() - 1);
+            model.getHistory(city, previousDate).then((data) => {
+                model.allData.unshift(data);
+                const newCard = view.createForecastWeatherCard(data);
+                cards.unshift(newCard);
+                const translationValue = -view.getTranslation();
+                view.translateCard(newCard, translationValue);
+                cardsContainer.insertBefore(newCard, cardsContainer.firstChild);
+                view.slideRight(cards);
             })
-        }
+            
+        })
+
         window.addEventListener('resize', () => {
-            view.translateItems(cardsContainer, currentCards);
+            view.slideRight(cards);
         })
     }
 
     const getWeatherData = (city) => {
-
-        Promise.all([model.getCurrentWeather(city), model.getForecast(city), model.getHistory(city)])
+        Promise.all([model.getCurrentWeather(city), model.getForecast(city)])
         .then((data) => {
-            displayWeatherData(data[0],data[1]);
+            displayWeatherData(city, data[0], data[1]);
         })
     }
 

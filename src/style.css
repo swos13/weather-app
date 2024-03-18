@@ -31,8 +31,8 @@ body {
 }
 
 .cards-container {
+    position: relative;
     height: 240px;
-    gap: 32px;
     margin-bottom: 32px;
     overflow: hidden;
 }
@@ -54,6 +54,7 @@ body {
     width: calc((100% - 64px) / 3);
     height: 100%;
     position: absolute;
+    transition: transform 300ms ease-in-out;
 }
 
 .weather-card {
