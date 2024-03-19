@@ -1,6 +1,6 @@
 const view = (() => {
 
-    const searchInput = document.querySelector("#city-name-input");
+    const searchInput = document.querySelector("#city-name");
     const searchButton = document.querySelector(".search-button");
     const weatherContainer = document.querySelector(".weather-container");
     let cardsContainer;

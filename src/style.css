@@ -1,24 +1,64 @@
+@font-face {
+    font-family: Montserrat;
+    src: url("./fonts/Montserrat-VariableFont_wght.ttf");
+}
+
 body {
+    margin: 0;
+    background: linear-gradient(90deg, rgb(90, 0, 78) 0%, rgb(129, 24, 170) 50%, rgb(89, 0, 255) 100%);
+}
+
+body > *{
     margin-right: 10%;
     margin-left: 10%;
+    margin-top: 5%;
+}
+
+.header > h1 {
+    font: 800 italic 2rem Montserrat, Helvetica, sans-serif;
+    color: white;
+    margin-bottom: 0; 
 }
 
 .header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 32px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-container > label {
+    color: white;
+    font: 700 1.2rem Montserrat, Helvetica, sans-serif;
+    text-align: center;
 }
 
 #city-name {
+    font: 500 1rem Montserrat, Helvetica, sans-serif;
     padding: 0.5rem;
     border-radius: 24px;
-    border: 2px solid;
+    border: 2px solid white;
+    border-radius: 8px;
 }
 
 .search-button {
+    font: 700 1.1rem Montserrat, Helvetica, sans-serif;
+    color: white;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+    width: 120px;
     padding: 0.5rem;
+    border: none;
     border-radius: 24px;
+}
+
+.search-button:active {
+    background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2));
 }
 
 .location-container {
