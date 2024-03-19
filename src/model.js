@@ -5,6 +5,8 @@ import weatherAPI from "./weatherAPI"
 
 const model = (() => {
 
+    const allData = [];
+
     const setUp = () => {
         weatherAPI.setKey();
     }
@@ -61,7 +63,16 @@ const model = (() => {
         return getWeatherDay(forecastday[0], location);
     }
 
-    return { setUp, getCurrentWeather, getForecast, getHistory }
+    const isDataAvailable = (date) => {
+        const today = new Date();
+        today.setMinutes = 0;
+        today.setHours = 0;
+        if(date >= (new Date).setDate(today.getDate() - 9) && date < (new Date).setDate(today.getDate() + 2))
+            return true;
+        return false;
+    }
+
+    return { allData, setUp, getCurrentWeather, getForecast, getHistory, isDataAvailable }
 })();
 
 export default model;

@@ -23,15 +23,38 @@ body {
 
 .location-container {
     text-align: center;
+    margin: 32px auto;
+}
+
+.slider {
+    position: relative;
 }
 
 .cards-container {
-    display: flex;
-    justify-content: center;
+    position: relative;
+    height: 240px;
+    margin-bottom: 32px;
+    overflow: hidden;
+}
+
+.left-button {
+    position: absolute;
+    top: 50%;
+    right: 100%;
+}
+
+.right-button {
+    position: absolute;
+    top: 50%;
+    left: 100%;
 }
 
 .cards-container > .weather-card {
-    flex: 1;
+    box-sizing: border-box;
+    width: calc((100% - 64px) / 3);
+    height: 100%;
+    position: absolute;
+    transition: transform 300ms ease-in-out;
 }
 
 .weather-card {

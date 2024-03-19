@@ -4,28 +4,72 @@ import "./style.css"
 
 const controller = (() => {
 
-    const displayWeatherData = (current, forecast) => {
+
+    const displayWeatherData = (city, current, forecast) => {
         view.clearWeatherContainer();
         view.displayLocationName(current.location.city, current.location.country);
         const weatherContainer = view.getWeatherContainer();
+        const slider = view.createSliderContainer();
         const cardsContainer = view.createCardsContainer();
-        view.appendChildren(weatherContainer, [cardsContainer]);
+        const [leftButton, rightButton] = view.createButtons();
+        view.appendChildren(slider, [leftButton, cardsContainer, rightButton]);
+        view.appendChildren(weatherContainer, [slider]);
         const forecastCards = view.createForecastCards(forecast);
-        view.appendChildren(cardsContainer, forecastCards);
+        model.allData = forecast;
+        view.putItemsInCardsContainer(forecastCards);
         view.appendChildren(weatherContainer, [view.createDayDetails(forecast[0], current.time.getHours())]);
-        for(let i=0; i<forecast.length; i++){
-            forecastCards[i].addEventListener('click', () => {
-                view.clearDayDetails();
-                view.appendChildren(weatherContainer, [view.createDayDetails(forecast[i], current.time.getHours())]);
-            })
-        }
+        const cards = Array.from(forecastCards);
+        view.slideRight(cards, 1);
+        let leftmostCardId = 0;
+        
+        leftButton.addEventListener('click', () => {
+            if(leftmostCardId === 0){
+                const previousDate = model.allData[0].date;
+                previousDate.setDate(previousDate.getDate() - 1);
+                if(model.isDataAvailable(previousDate)){
+                    model.getHistory(city, previousDate).then((data) => {
+                        model.allData.unshift(data);
+                        const newCard = view.createForecastWeatherCard(data);
+                        cards.unshift(newCard);
+                        const translationValue = -view.getTranslation();
+                        view.translateCard(newCard, translationValue);
+                        cardsContainer.insertBefore(newCard, cardsContainer.firstChild);
+                        view.slideRight(cards, leftmostCardId+1);
+                    })
+                }
+            }
+            else {
+                view.slideRight(cards, leftmostCardId);
+                leftmostCardId--;
+            }
+            
+        })
+
+        rightButton.addEventListener('click', () => {
+            if(leftmostCardId === cards.length-3){
+                const nextDate = model.allData[model.allData.length-1].date;
+                nextDate.setDate(nextDate.getDate() + 1);
+                if(model.isDataAvailable(nextDate)){
+                    view.slideLeft(cards, leftmostCardId);
+                    leftmostCardId--;
+                }
+            }
+            else {
+                view.slideLeft(cards, leftmostCardId);
+                leftmostCardId++;
+            }
+            
+        })
+
+        window.addEventListener('resize', () => {
+            view.slideRight(cards, leftmostCardId);
+        })
     }
 
     const getWeatherData = (city) => {
-
-        Promise.all([model.getCurrentWeather(city), model.getForecast(city), model.getHistory(city, new Date("2024-03-07"))])
+        Promise.all([model.getCurrentWeather(city), model.getForecast(city)])
         .then((data) => {
-            displayWeatherData(data[0],data[1]);
+            displayWeatherData(city, data[0], data[1]);
         })
     }
 
