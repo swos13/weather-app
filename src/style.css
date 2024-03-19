@@ -66,6 +66,16 @@ body > *{
     margin: 32px auto;
 }
 
+.location-container > .city-name {
+    color: white;
+    font: 700 1.6rem Montserrat, Helvetica, sans-serif;
+}
+
+.location-container > .country-name {
+    color: rgba(255,255,255,0.8);
+    font: 600 1rem Montserrat, Helvetica, sans-serif;
+}
+
 .slider {
     position: relative;
 }
@@ -77,15 +87,22 @@ body > *{
     overflow: hidden;
 }
 
+.left-button, .right-button {
+    color: white;
+    font: 300 2rem Montserrat, Helvetica, sans-serif;
+    background: none;
+    border: none;
+}
+
 .left-button {
     position: absolute;
-    top: 50%;
+    top: calc(50% - 16px);
     right: 100%;
 }
 
 .right-button {
     position: absolute;
-    top: 50%;
+    top: calc(50% - 16px);
     left: 100%;
 }
 
