@@ -38,10 +38,16 @@ const view = (() => {
         card.style.transform = `translateX(${translation}px)`;
     }
 
-    const slideRight = (cards) => {
+    const slideRight = (cards, leftmostCardId) => {
         const translationX = getTranslation();
         for(let i = 0; i < cards.length; i++)
-            translateCard(cards[i],i*translationX);
+            translateCard(cards[i],(i-leftmostCardId+1)*translationX);
+    }
+
+    const slideLeft = (cards, leftmostCardId) => {
+        const translationX = getTranslation();
+        for(let i = 0; i < cards.length; i++)
+            translateCard(cards[i],(i-leftmostCardId-1)*translationX);
     }
 
     const putItemsInCardsContainer = (items) => {
@@ -232,7 +238,7 @@ const view = (() => {
 
     return { appendChildren, removeFromView, displayLocationName, getTranslation, 
         createSliderContainer, createCardsContainer, translateCard, 
-        slideRight, putItemsInCardsContainer, createButtons, createForecastCards, 
+        slideRight, slideLeft, putItemsInCardsContainer, createButtons, createForecastCards, 
         getWeatherContainer, getSearchInput, getSearchButton, 
         createCurrentWeatherCard, clearDayDetails, createForecastWeatherCard,
         createDayDetails, clearWeatherContainer }
