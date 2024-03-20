@@ -110,7 +110,7 @@ body > * {
     background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
     border: none;
     border-radius: 16px;
-    padding: 8px;
+    padding: 16px;
     color: white;
 }
 
@@ -120,10 +120,30 @@ body > * {
     height: 100%;
     position: absolute;
     transition: transform 300ms ease-in-out;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .weather-card > .icon {
     width: 64px;
+    align-self: center;
+}
+
+.day-container {
+    font: 700 1.4rem Montserrat, Helvetica, sans-serif;
+}
+
+.date-container, .humidity-container, .wind-container {
+    font: 500 1rem Montserrat, Helvetica, sans-serif;
+}
+
+.day-container, .date-container, .condition-container, .humidity-container, .wind-container {
+    text-align: center;
+}
+
+.condition-container {
+    font: 600 1rem Montserrat, Helvetica, sans-serif;
 }
 
 .details > .icon {
