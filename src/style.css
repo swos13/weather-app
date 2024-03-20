@@ -8,10 +8,10 @@ body {
     background: linear-gradient(90deg, rgb(90, 0, 78) 0%, rgb(129, 24, 170) 50%, rgb(89, 0, 255) 100%);
 }
 
-body > *{
+body > * {
     margin-right: 10%;
     margin-left: 10%;
-    margin-top: 5%;
+    margin-top: 3%;
 }
 
 .header > h1 {
@@ -106,16 +106,20 @@ body > *{
     left: 100%;
 }
 
+.weather-card, .details {
+    background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+    border: none;
+    border-radius: 16px;
+    padding: 8px;
+    color: white;
+}
+
 .cards-container > .weather-card {
     box-sizing: border-box;
     width: calc((100% - 64px) / 3);
     height: 100%;
     position: absolute;
     transition: transform 300ms ease-in-out;
-}
-
-.weather-card {
-    border: 1px solid black;
 }
 
 .weather-card > .icon {

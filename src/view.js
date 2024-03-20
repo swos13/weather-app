@@ -91,16 +91,21 @@ const view = (() => {
     const createCardWithDate = (dateData) => {
         const card = createCard('weather-card');
 
+        const day = document.createElement('div');
+        day.classList.add('day-container');
+
+        let dayName = '';
+        if((new Date()).toLocaleDateString('en-GB') === dateData.toLocaleDateString('en-GB')) dayName = 'Today';
+        else dayName = dateData.toLocaleDateString('en-GB', { weekday: 'long' });
+
+        day.textContent = dayName;
+
         const date = document.createElement('div');
-        date.classList.add('date-container');
+        date.classList.add('day-container');
 
-        let day = '';
-        if((new Date()).toLocaleDateString('en-GB') === dateData.toLocaleDateString('en-GB')) day = 'Today';
-        else day = dateData.toLocaleDateString('en-GB', { weekday: 'long' });
+        date.textContent = dateData.toLocaleDateString('en-GB');
 
-        date.textContent = `${day} ${dateData.toLocaleDateString('en-GB')}`;
-
-        card.appendChild(date);
+        appendChildren(card, [day, date]);
 
         return card;
     }
@@ -157,6 +162,7 @@ const view = (() => {
         if(parseInt((new Date()).getMinutes(), 10) > 30)
             currentHour++;
         const card = createCardWithDate(data.hours[currentHour].time);
+        card.classList.remove('weather-card');
         card.classList.add('details');
         const hoursContainer = document.createElement('div');
         hoursContainer.classList.add('hours-container');
