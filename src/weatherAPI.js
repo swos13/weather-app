@@ -1,11 +1,12 @@
 const weatherAPI = (() => {
 
-    let key = "";
+    let key = "3cad06c4a4754e779ba104709240403";
 
     const setKey = () => {
+        if(key === "" || key == null){
         key = prompt("What is your api key (from weatherapi.com)?");
-        if(key === "" || key == null)
             setKey();
+        }
     }
 
     const getCurrent = async (city) => {
