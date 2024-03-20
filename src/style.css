@@ -1,29 +1,90 @@
+@font-face {
+    font-family: Montserrat;
+    src: url("./fonts/Montserrat-VariableFont_wght.ttf");
+}
+
 body {
+    margin: 0;
+    background: linear-gradient(90deg, rgb(90, 0, 78) 0%, rgb(129, 24, 170) 50%, rgb(89, 0, 255) 100%);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
     margin-right: 10%;
     margin-left: 10%;
+    margin-top: 3%;
+    margin-bottom: 5%;
+}
+
+main > * {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header > h1 {
+    font: 800 italic 2rem Montserrat, Helvetica, sans-serif;
+    color: white;
+    margin-bottom: 0; 
 }
 
 .header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 32px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-container > label {
+    color: white;
+    font: 700 1.2rem Montserrat, Helvetica, sans-serif;
+    text-align: center;
 }
 
 #city-name {
+    font: 500 1rem Montserrat, Helvetica, sans-serif;
     padding: 0.5rem;
     border-radius: 24px;
-    border: 2px solid;
+    border: 2px solid white;
+    border-radius: 8px;
 }
 
 .search-button {
+    font: 700 1.1rem Montserrat, Helvetica, sans-serif;
+    color: white;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+    width: 120px;
     padding: 0.5rem;
+    border: none;
     border-radius: 24px;
+}
+
+.search-button:active {
+    background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2));
 }
 
 .location-container {
     text-align: center;
     margin: 32px auto;
+}
+
+.location-container > .city-name {
+    color: white;
+    font: 700 1.6rem Montserrat, Helvetica, sans-serif;
+}
+
+.location-container > .country-name {
+    color: rgba(255,255,255,0.8);
+    font: 600 1rem Montserrat, Helvetica, sans-serif;
 }
 
 .slider {
@@ -37,16 +98,31 @@ body {
     overflow: hidden;
 }
 
+.left-button, .right-button {
+    color: white;
+    font: 300 2rem Montserrat, Helvetica, sans-serif;
+    background: none;
+    border: none;
+}
+
 .left-button {
     position: absolute;
-    top: 50%;
+    top: calc(50% - 16px);
     right: 100%;
 }
 
 .right-button {
     position: absolute;
-    top: 50%;
+    top: calc(50% - 16px);
     left: 100%;
+}
+
+.weather-card, .details {
+    background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    color: white;
 }
 
 .cards-container > .weather-card {
@@ -55,43 +131,77 @@ body {
     height: 100%;
     position: absolute;
     transition: transform 300ms ease-in-out;
-}
-
-.weather-card {
-    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .weather-card > .icon {
     width: 64px;
+    align-self: center;
 }
 
-.details > .icon {
-    width: 32px;
+.details > *{
+    margin-bottom: 4px;
+}
+
+.day-container {
+    font: 700 1.4rem Montserrat, Helvetica, sans-serif;
+}
+
+.date-container, .humidity-container, .wind-container {
+    font: 500 1rem Montserrat, Helvetica, sans-serif;
+}
+
+.day-container, .date-container, .time-container, .condition-container, .humidity-container, .wind-container {
+    text-align: center;
+}
+
+.time-container, .condition-container {
+    font: 600 1rem Montserrat, Helvetica, sans-serif;
 }
 
 .hours-container {
     margin-right: auto;
     margin-left: auto;
     font-size: 0.8rem;
-    display: inline-flex;
+    display: flex;
     gap: 16px;
-    flex-wrap: wrap;
+    overflow: auto;
+    padding: 16px 4px;
 }
 
 .hour {
     color: #999999;
+    font: 700 0.8rem Montserrat, Helvetica, sans-serif;
 }
 
 .hour-container.active > .hour {
-    color: black;
-}
-
-.hour-container > .icon {
-    width: 24px;
+    color: rgb(240, 240, 240);
 }
 
 .hour-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.hour-container > .icon {
+    width: 32px;
+}
+
+footer {
+    margin: 0;
+    width: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background: #1e1b30;
+    color: white;
+    font: 600 1rem Montserrat, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
+footer > div > a {
+    color: white;
 }

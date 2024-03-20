@@ -1,6 +1,6 @@
 const view = (() => {
 
-    const searchInput = document.querySelector("#city-name-input");
+    const searchInput = document.querySelector("#city-name");
     const searchButton = document.querySelector(".search-button");
     const weatherContainer = document.querySelector(".weather-container");
     let cardsContainer;
@@ -91,24 +91,29 @@ const view = (() => {
     const createCardWithDate = (dateData) => {
         const card = createCard('weather-card');
 
+        const day = document.createElement('div');
+        day.classList.add('day-container');
+
+        let dayName = '';
+        if((new Date()).toLocaleDateString('en-GB') === dateData.toLocaleDateString('en-GB')) dayName = 'Today';
+        else dayName = dateData.toLocaleDateString('en-GB', { weekday: 'long' });
+
+        day.textContent = dayName;
+
         const date = document.createElement('div');
         date.classList.add('date-container');
 
-        let day = '';
-        if((new Date()).toLocaleDateString('en-GB') === dateData.toLocaleDateString('en-GB')) day = 'Today';
-        else day = dateData.toLocaleDateString('en-GB', { weekday: 'long' });
+        date.textContent = dateData.toLocaleDateString('en-GB');
 
-        date.textContent = `${day} ${dateData.toLocaleDateString('en-GB')}`;
-
-        card.appendChild(date);
+        appendChildren(card, [day, date]);
 
         return card;
     }
 
-    const createCurrentWeather = (data) => {
+    const createWeatherSummary = (data) => {
         const condition = document.createElement('div');
         condition.classList.add('condition-container');
-        condition.textContent = `${data.tempC}C ${data.condition.text}`;
+        condition.textContent = `${data.tempC}\u00B0C ${data.condition.text}`;
 
         const humidity = document.createElement('div');
         humidity.classList.add('humidity-container');
@@ -119,22 +124,6 @@ const view = (() => {
         wind.textContent = `Wind: ${data.wind}km/h`;
 
         return [condition, humidity, wind];
-    }
-
-    const createCurrentWeatherCard = (data) => {
-        const card = createCardWithDate(data.time);
-
-        const time = document.createElement('div');
-        time.classList.add('time-container');
-        time.textContent = `${data.time.getHours()}:${data.time.getMinutes()}`;
-        if(data.time.getMinutes() === 0) time.textContent += '0';
-
-        const icon = document.createElement('img');
-        icon.classList.add('icon');
-        icon.src = data.condition.iconUrl;
-
-        appendChildren(card, [time, icon, ...createCurrentWeather(data)]);
-        return card;
     }
 
     const getConditionOfDay = (hours) => {
@@ -157,6 +146,7 @@ const view = (() => {
         if(parseInt((new Date()).getMinutes(), 10) > 30)
             currentHour++;
         const card = createCardWithDate(data.hours[currentHour].time);
+        card.classList.remove('weather-card');
         card.classList.add('details');
         const hoursContainer = document.createElement('div');
         hoursContainer.classList.add('hours-container');
@@ -177,7 +167,10 @@ const view = (() => {
                 hourContainer.classList.add('active');
                 while(card.lastChild && card.lastChild !== hoursContainer)
                     card.removeChild(card.lastChild)
-                appendChildren(card, createCurrentWeather(data.hours[hour.time.getHours()]));
+                const time = document.createElement('div');
+                time.textContent = `${hour.time.getHours()}:00`;
+                time.classList.add('time-container');
+                appendChildren(card, [time, ...createWeatherSummary(data.hours[hour.time.getHours()])]);
             })
 
             appendChildren(hourContainer, [text, icon]);
@@ -185,8 +178,11 @@ const view = (() => {
         })
         hoursContainer.children.item(currentHour).classList.add('active');
         card.appendChild(hoursContainer);
-        const weatherData = createCurrentWeather(data.hours[currentHour]);
-        appendChildren(card, weatherData);
+        const weatherData = createWeatherSummary(data.hours[currentHour]);
+        const time = document.createElement('div');
+        time.textContent = `${currentHour}:00`;
+        time.classList.add('time-container');
+        appendChildren(card, [time, ...weatherData]);
         return card;
     }
 
@@ -208,7 +204,7 @@ const view = (() => {
 
         const condition = document.createElement('div');
         condition.classList.add('condition-container');
-        condition.textContent = `${data.avgTempC}C ${conditionData.text}`;
+        condition.textContent = `${data.avgTempC}\u00B0C ${conditionData.text}`;
 
         const humidity = document.createElement('div');
         humidity.classList.add('humidity-container');
@@ -240,7 +236,7 @@ const view = (() => {
         createSliderContainer, createCardsContainer, translateCard, 
         slideRight, slideLeft, putItemsInCardsContainer, createButtons, createForecastCards, 
         getWeatherContainer, getSearchInput, getSearchButton, 
-        createCurrentWeatherCard, clearDayDetails, createForecastWeatherCard,
+        clearDayDetails, createForecastWeatherCard,
         createDayDetails, clearWeatherContainer }
 })();
 
