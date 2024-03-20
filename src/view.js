@@ -167,7 +167,10 @@ const view = (() => {
                 hourContainer.classList.add('active');
                 while(card.lastChild && card.lastChild !== hoursContainer)
                     card.removeChild(card.lastChild)
-                appendChildren(card, createWeatherSummary(data.hours[hour.time.getHours()]));
+                const time = document.createElement('div');
+                time.textContent = `${hour.time.getHours()}:00`;
+                time.classList.add('time-container');
+                appendChildren(card, [time, ...createWeatherSummary(data.hours[hour.time.getHours()])]);
             })
 
             appendChildren(hourContainer, [text, icon]);
@@ -176,7 +179,10 @@ const view = (() => {
         hoursContainer.children.item(currentHour).classList.add('active');
         card.appendChild(hoursContainer);
         const weatherData = createWeatherSummary(data.hours[currentHour]);
-        appendChildren(card, weatherData);
+        const time = document.createElement('div');
+        time.textContent = `${currentHour}:00`;
+        time.classList.add('time-container');
+        appendChildren(card, [time, ...weatherData]);
         return card;
     }
 
