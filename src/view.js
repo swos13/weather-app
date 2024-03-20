@@ -113,7 +113,7 @@ const view = (() => {
     const createWeatherSummary = (data) => {
         const condition = document.createElement('div');
         condition.classList.add('condition-container');
-        condition.textContent = `${data.tempC}C ${data.condition.text}`;
+        condition.textContent = `${data.tempC}\u00B0C ${data.condition.text}`;
 
         const humidity = document.createElement('div');
         humidity.classList.add('humidity-container');

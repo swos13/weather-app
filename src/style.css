@@ -6,12 +6,23 @@
 body {
     margin: 0;
     background: linear-gradient(90deg, rgb(90, 0, 78) 0%, rgb(129, 24, 170) 50%, rgb(89, 0, 255) 100%);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
 }
 
-body > * {
+main {
+    flex: 1;
     margin-right: 10%;
     margin-left: 10%;
     margin-top: 3%;
+    margin-bottom: 5%;
+}
+
+main > * {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .header > h1 {
@@ -169,14 +180,28 @@ body > * {
     color: rgb(240, 240, 240);
 }
 
-
 .hour-container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-
 .hour-container > .icon {
     width: 32px;
+}
+
+footer {
+    margin: 0;
+    width: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background: #1e1b30;
+    color: white;
+    font: 600 1rem Montserrat, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
+footer > div > a {
+    color: white;
 }
