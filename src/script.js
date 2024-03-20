@@ -61,9 +61,12 @@ const controller = (() => {
             
         })
 
+        
         window.addEventListener('resize', () => {
-            view.slideRight(cards, leftmostCardId);
+            view.slideLeft(cards, leftmostCardId)
+            view.slideRight(cards, leftmostCardId+1);
         })
+        
     }
 
     const getWeatherData = (city) => {
