@@ -92,7 +92,7 @@ const controller = (() => {
                 searchButton.click();
             }
             else if (searchInput.value.length > 2){
-                model.getAutocomplete(searchInput.value).then((r) => console.log(r));
+                model.getAutocomplete(searchInput.value).then((locations) => view.createAutocomplete(locations));
             }
         });
         searchInput.addEventListener("change", () => {

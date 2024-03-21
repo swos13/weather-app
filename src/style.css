@@ -50,12 +50,36 @@ main > * {
     text-align: center;
 }
 
-#city-name {
+.autocomplete-container {
+    position: relative;
+    width: 240px;
+}
+
+#city-name, .city-autocomplete {
     font: 500 1rem Montserrat, Helvetica, sans-serif;
     padding: 0.5rem;
+}
+
+#city-name:focus ~ .city-autocomplete {
+    visibility: visible;
+}
+
+#city-name {
     border-radius: 24px;
     border: 2px solid white;
     border-radius: 8px;
+}
+
+.city-autocomplete {
+    position: absolute;
+    width: 100%;
+    box-sizing: border-box;
+    visibility: hidden;
+    background-color: white;
+}
+
+.city-autocomplete:hover {
+    font-weight: 700
 }
 
 .search-button {

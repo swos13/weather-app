@@ -18,6 +18,18 @@ const view = (() => {
         parent.removeChild(child);
     }
 
+    const createAutocomplete = (locations) => {
+        const inputContainer = document.querySelector('.autocomplete-container');
+        while(inputContainer.lastChild && inputContainer.lastChild !== searchInput)
+            inputContainer.removeChild(inputContainer.lastChild);
+        locations.forEach((location) => {
+            const city = document.createElement('div');
+            city.classList.add('city-autocomplete');
+            city.textContent = location;
+            inputContainer.appendChild(city);
+        })
+    }
+
     const createSliderContainer = () => {
         const slider = document.createElement('div');
         slider.classList.add('slider');
@@ -235,7 +247,7 @@ const view = (() => {
     return { appendChildren, removeFromView, displayLocationName, getTranslation, 
         createSliderContainer, createCardsContainer, translateCard, 
         slideRight, slideLeft, putItemsInCardsContainer, createButtons, createForecastCards, 
-        getWeatherContainer, getSearchInput, getSearchButton, 
+        getWeatherContainer, getSearchInput, getSearchButton, createAutocomplete, 
         clearDayDetails, createForecastWeatherCard,
         createDayDetails, clearWeatherContainer }
 })();
