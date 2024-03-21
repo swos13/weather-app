@@ -22,10 +22,14 @@ const view = (() => {
         const inputContainer = document.querySelector('.autocomplete-container');
         while(inputContainer.lastChild && inputContainer.lastChild !== searchInput)
             inputContainer.removeChild(inputContainer.lastChild);
+        const height = searchInput.offsetHeight-4;
+        let multiplier = 0;
         locations.forEach((location) => {
             const city = document.createElement('div');
             city.classList.add('city-autocomplete');
+            city.style.transform = `translateY(${height*multiplier}px)`;
             city.textContent = location;
+            multiplier++;
             inputContainer.appendChild(city);
         })
     }

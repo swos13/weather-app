@@ -91,13 +91,28 @@ const controller = (() => {
                 event.preventDefault();
                 searchButton.click();
             }
-            else if (searchInput.value.length > 2){
-                model.getAutocomplete(searchInput.value).then((locations) => view.createAutocomplete(locations));
-            }
         });
         searchInput.addEventListener("change", () => {
             entered = false;
         });
+        searchInput.addEventListener('input', () => {
+            if (searchInput.value.length > 2){
+                model.getAutocomplete(searchInput.value).then((locations) => {
+                    const locationNames = [];
+                    const locationLatLon = []
+                    locations.forEach((location) => {
+                        let locationName = location.name;
+                        if(location.region.trim() !== '')
+                            locationName += `, ${location.region}`;
+                        locationName += `, ${location.country}`;
+                        locationNames.push(locationName);
+                        locationLatLon.push(`${location.lat},${location.lon}`);
+                    })
+                    console.log(locations)
+                    view.createAutocomplete(locationNames);
+                });
+            }
+        })
     }
     return { start }
 })()

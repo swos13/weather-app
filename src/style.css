@@ -52,7 +52,7 @@ main > * {
 
 .autocomplete-container {
     position: relative;
-    width: 240px;
+    width: 360px;
 }
 
 #city-name, .city-autocomplete {
@@ -65,13 +65,18 @@ main > * {
 }
 
 #city-name {
+    width: 100%;
     border-radius: 24px;
     border: 2px solid white;
     border-radius: 8px;
 }
 
 .city-autocomplete {
+    padding: 0.7rem;
+    font: 500 0.8rem Montserrat, Helvetica, sans-serif;
     position: absolute;
+    overflow: auto;
+    text-wrap: nowrap;
     width: 100%;
     box-sizing: border-box;
     visibility: hidden;
