@@ -91,6 +91,9 @@ const controller = (() => {
                 event.preventDefault();
                 searchButton.click();
             }
+            else if (searchInput.value.length > 2){
+                model.getAutocomplete(searchInput.value).then((r) => console.log(r));
+            }
         });
         searchInput.addEventListener("change", () => {
             entered = false;

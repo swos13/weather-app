@@ -9,6 +9,12 @@ const weatherAPI = (() => {
         }
     }
 
+    const getAutocomplete = async (city) => {
+        const response = await fetch(`https://api.weatherapi.com/v1/search.json?key=${key}&q=${city}`);
+        const cities = await response.json();
+        return cities;
+    }
+
     const getCurrent = async (city) => {
         const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${key}&q=${city}`);
         const weatherData = await response.json();
@@ -26,7 +32,7 @@ const weatherAPI = (() => {
         const historyData = await response.json();
         return historyData;
     }
-    return { setKey, getCurrent, getForecast, getHistory }
+    return { setKey, getAutocomplete, getCurrent, getForecast, getHistory }
 })();
 
 export default weatherAPI;

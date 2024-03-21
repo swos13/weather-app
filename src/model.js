@@ -11,6 +11,11 @@ const model = (() => {
         weatherAPI.setKey();
     }
 
+    const getAutocomplete = (city) => {
+        const cities = weatherAPI.getAutocomplete(city);
+        return cities;
+    }
+
     const getWeatherData = (object) => {
         const {condition: {icon, text}, temp_c, temp_f, feelslike_c, feelslike_f, wind_kph, humidity, is_day} = object;
         return [icon, text, temp_c, temp_f, feelslike_c, feelslike_f, wind_kph, humidity, is_day];
@@ -72,7 +77,7 @@ const model = (() => {
         return false;
     }
 
-    return { allData, setUp, getCurrentWeather, getForecast, getHistory, isDataAvailable }
+    return { allData, setUp, getAutocomplete, getCurrentWeather, getForecast, getHistory, isDataAvailable }
 })();
 
 export default model;
