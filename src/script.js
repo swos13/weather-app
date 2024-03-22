@@ -105,20 +105,14 @@ const controller = (() => {
         model.setUp();
         const searchButton = view.getSearchButton();
         const searchInput = view.getSearchInput();
-        let entered = false;
         searchButton.addEventListener("click", () => {
-            entered = true;
             getWeatherData(searchInput.value);
         });
         searchInput.addEventListener("keypress", (event) => {
-            if(event.key === "Enter" && entered === false){
-                entered = true;
+            if(event.key === "Enter"){
                 event.preventDefault();
                 searchButton.click();
             }
-        });
-        searchInput.addEventListener("change", () => {
-            entered = false;
         });
         searchInput.addEventListener("input", () => {
             if (searchInput.value.length > 0)
