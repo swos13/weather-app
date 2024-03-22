@@ -3,6 +3,7 @@ const view = (() => {
     const searchInput = document.querySelector("#city-name");
     const searchButton = document.querySelector(".search-button");
     const weatherContainer = document.querySelector(".weather-container");
+    const autocompleteContainer = document.querySelector('.autocomplete-container');
     let cardsContainer;
 
     const getSearchInput = () => searchInput;
@@ -19,9 +20,8 @@ const view = (() => {
     }
 
     const createAutocomplete = (locations) => {
-        const inputContainer = document.querySelector('.autocomplete-container');
-        while(inputContainer.lastChild && inputContainer.lastChild !== searchInput)
-            inputContainer.removeChild(inputContainer.lastChild);
+        while(autocompleteContainer.lastChild && autocompleteContainer.lastChild !== searchInput)
+            autocompleteContainer.removeChild(autocompleteContainer.lastChild);
         const height = searchInput.offsetHeight-4;
         let multiplier = 0;
         locations.forEach((location) => {
@@ -30,8 +30,13 @@ const view = (() => {
             city.style.transform = `translateY(${height*multiplier}px)`;
             city.textContent = location;
             multiplier++;
-            inputContainer.appendChild(city);
+            autocompleteContainer.appendChild(city);
         })
+    }
+
+    const clearAutocompleteContainer = () => {
+        while(autocompleteContainer.lastChild && autocompleteContainer.lastChild !== searchInput)
+            autocompleteContainer.removeChild(autocompleteContainer.lastChild);
     }
 
     const createSliderContainer = () => {
@@ -252,7 +257,7 @@ const view = (() => {
         createSliderContainer, createCardsContainer, translateCard, 
         slideRight, slideLeft, putItemsInCardsContainer, createButtons, createForecastCards, 
         getWeatherContainer, getSearchInput, getSearchButton, createAutocomplete, 
-        clearDayDetails, createForecastWeatherCard,
+        clearAutocompleteContainer, clearDayDetails, createForecastWeatherCard,
         createDayDetails, clearWeatherContainer }
 })();
 

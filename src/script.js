@@ -95,8 +95,8 @@ const controller = (() => {
         searchInput.addEventListener("change", () => {
             entered = false;
         });
-        searchInput.addEventListener('input', () => {
-            if (searchInput.value.length > 2){
+        searchInput.addEventListener("input", () => {
+            if (searchInput.value.length > 0){
                 model.getAutocomplete(searchInput.value).then((locations) => {
                     const locationNames = [];
                     const locationLatLon = []
@@ -108,7 +108,6 @@ const controller = (() => {
                         locationNames.push(locationName);
                         locationLatLon.push(`${location.lat},${location.lon}`);
                     })
-                    console.log(locations)
                     view.createAutocomplete(locationNames);
                 });
             }
