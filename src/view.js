@@ -24,6 +24,7 @@ const view = (() => {
             autocompleteContainer.removeChild(autocompleteContainer.lastChild);
         const height = searchInput.offsetHeight-4;
         let multiplier = 0;
+        const locationOptions = [];
         locations.forEach((location) => {
             const city = document.createElement('div');
             city.classList.add('city-autocomplete');
@@ -31,7 +32,9 @@ const view = (() => {
             city.textContent = location;
             multiplier++;
             autocompleteContainer.appendChild(city);
+            locationOptions.push(city);
         })
+        return locationOptions;
     }
 
     const clearAutocompleteContainer = () => {

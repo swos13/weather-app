@@ -61,7 +61,6 @@ const controller = (() => {
             
         })
 
-        
         window.addEventListener('resize', () => {
             view.slideLeft(cards, leftmostCardId)
             view.slideRight(cards, leftmostCardId+1);
@@ -74,6 +73,32 @@ const controller = (() => {
         .then((data) => {
             displayWeatherData(city, data[0], data[1]);
         })
+    }
+
+    const setAutocompleteEvent = (coordinates, option) => {
+        option.addEventListener('click', () => {
+            getWeatherData(coordinates);
+            view.clearAutocompleteContainer();
+        })
+    }
+
+    const autocompleteSearch = (input) => {
+        model.getAutocomplete(input).then((locations) => {
+            const locationNames = [];
+            const locationLatLon = []
+            locations.forEach((location) => {
+                let locationName = location.name;
+                if(location.region.trim() !== '')
+                    locationName += `, ${location.region}`;
+                locationName += `, ${location.country}`;
+                locationNames.push(locationName);
+                locationLatLon.push(`${location.lat},${location.lon}`);
+            })
+            const options = view.createAutocomplete(locationNames);
+            for(let i=0; i<options.length; i++){
+                setAutocompleteEvent(locationLatLon[i], options[i]);
+            }
+        });
     }
 
     const start = () => {
@@ -96,21 +121,12 @@ const controller = (() => {
             entered = false;
         });
         searchInput.addEventListener("input", () => {
-            if (searchInput.value.length > 0){
-                model.getAutocomplete(searchInput.value).then((locations) => {
-                    const locationNames = [];
-                    const locationLatLon = []
-                    locations.forEach((location) => {
-                        let locationName = location.name;
-                        if(location.region.trim() !== '')
-                            locationName += `, ${location.region}`;
-                        locationName += `, ${location.country}`;
-                        locationNames.push(locationName);
-                        locationLatLon.push(`${location.lat},${location.lon}`);
-                    })
-                    view.createAutocomplete(locationNames);
-                });
-            }
+            if (searchInput.value.length > 0)
+                autocompleteSearch(searchInput.value);
+        })
+        searchInput.addEventListener("focus", () => {
+            if (searchInput.value.length > 0)
+                autocompleteSearch(searchInput.value);
         })
     }
     return { start }
