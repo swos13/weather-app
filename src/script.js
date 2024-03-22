@@ -7,7 +7,7 @@ const controller = (() => {
 
     const displayWeatherData = (city, current, forecast) => {
         view.clearWeatherContainer();
-        view.displayLocationName(current.location.city, current.location.country);
+        view.displayLocationName(current.location.city, current.location.region, current.location.country);
         const weatherContainer = view.getWeatherContainer();
         const slider = view.createSliderContainer();
         const cardsContainer = view.createCardsContainer();

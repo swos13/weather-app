@@ -111,6 +111,11 @@ main > * {
     font: 700 1.6rem Montserrat, Helvetica, sans-serif;
 }
 
+.location-container > .region-name {
+    color: rgba(255,255,255,0.8);
+    font: 600 1rem Montserrat, Helvetica, sans-serif;
+}
+
 .location-container > .country-name {
     color: rgba(255,255,255,0.8);
     font: 600 1rem Montserrat, Helvetica, sans-serif;

@@ -22,10 +22,10 @@ const model = (() => {
     }
     
     const getCurrentWeatherData = (location, weatherData) => {
-        const {name, country} = location;
+        const {name, region, country} = location;
         const {last_updated} = weatherData;
         const weather = getWeatherData(weatherData);
-        return new WeatherWithLocation(name, country, last_updated, ...weather)
+        return new WeatherWithLocation(name, region, country, last_updated, ...weather)
     }
 
     const getForecastWeatherData = (weatherData) => {
@@ -45,7 +45,7 @@ const model = (() => {
                 hours.push(getForecastWeatherData(hour));
             })
             const summary = day.day;
-        return new WeatherDay(location.name, location.country, day.date, summary.mintemp_c, summary.maxtemp_c, summary.mintemp_f, summary.maxtemp_f, summary.avgtemp_c, summary.avgtemp_f, summary.avghumidity, summary.maxwind_kph, hours)
+        return new WeatherDay(location.name, location.region, location.country, day.date, summary.mintemp_c, summary.maxtemp_c, summary.mintemp_f, summary.maxtemp_f, summary.avgtemp_c, summary.avgtemp_f, summary.avghumidity, summary.maxwind_kph, hours)
     }
     
     const getForecast = async (city) => {

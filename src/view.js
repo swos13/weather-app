@@ -35,7 +35,7 @@ const view = (() => {
     }
 
     const clearAutocompleteContainer = () => {
-        while(autocompleteContainer.lastChild && autocompleteContainer.lastChild !== searchInput)
+     while(autocompleteContainer.lastChild && autocompleteContainer.lastChild !== searchInput)
             autocompleteContainer.removeChild(autocompleteContainer.lastChild);
     }
 
@@ -90,16 +90,19 @@ const view = (() => {
 
     const getWeatherContainer = () => weatherContainer;
 
-    const displayLocationName = (cityName, countryName) => {
+    const displayLocationName = (cityName, regionName, countryName) => {
         const locationContainer = document.createElement('div');
         locationContainer.classList.add('location-container');
         const city = document.createElement('div');
         city.classList.add('city-name');
+        const region = document.createElement('div');
+        region.classList.add('region-name');
         const country = document.createElement('div');
         country.classList.add('country-name');
         city.textContent = cityName;
+        region.textContent = regionName;
         country.textContent = countryName;
-        appendChildren(locationContainer, [city, country]);
+        appendChildren(locationContainer, [city, region, country]);
         weatherContainer.appendChild(locationContainer);
     }
 
