@@ -4,8 +4,8 @@ class WeatherDay {
 
     hours = [];
 
-    constructor(city, country, date, minTempC, maxTempC, minTempF, maxTempF, avgTempC, avgTempF, avgHumidity, maxWind, hours){
-        this.location = new Location(city, country);
+    constructor(city, region, country, date, minTempC, maxTempC, minTempF, maxTempF, avgTempC, avgTempF, avgHumidity, maxWind, hours){
+        this.location = new Location(city, region, country);
         this.date = new Date(date);
         this.minTempC = minTempC;
         this.maxTempC = maxTempC;

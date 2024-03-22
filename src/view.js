@@ -3,6 +3,7 @@ const view = (() => {
     const searchInput = document.querySelector("#city-name");
     const searchButton = document.querySelector(".search-button");
     const weatherContainer = document.querySelector(".weather-container");
+    const autocompleteContainer = document.querySelector('.autocomplete-container');
     let cardsContainer;
 
     const getSearchInput = () => searchInput;
@@ -16,6 +17,29 @@ const view = (() => {
 
     const removeFromView = (parent, child) => {
         parent.removeChild(child);
+    }
+
+    const createAutocomplete = (locations) => {
+        while(autocompleteContainer.lastChild && autocompleteContainer.lastChild !== searchInput)
+            autocompleteContainer.removeChild(autocompleteContainer.lastChild);
+        const height = searchInput.offsetHeight-4;
+        let multiplier = 0;
+        const locationOptions = [];
+        locations.forEach((location) => {
+            const city = document.createElement('div');
+            city.classList.add('city-autocomplete');
+            city.style.transform = `translateY(${height*multiplier}px)`;
+            city.textContent = location;
+            multiplier++;
+            autocompleteContainer.appendChild(city);
+            locationOptions.push(city);
+        })
+        return locationOptions;
+    }
+
+    const clearAutocompleteContainer = () => {
+     while(autocompleteContainer.lastChild && autocompleteContainer.lastChild !== searchInput)
+            autocompleteContainer.removeChild(autocompleteContainer.lastChild);
     }
 
     const createSliderContainer = () => {
@@ -69,16 +93,19 @@ const view = (() => {
 
     const getWeatherContainer = () => weatherContainer;
 
-    const displayLocationName = (cityName, countryName) => {
+    const displayLocationName = (cityName, regionName, countryName) => {
         const locationContainer = document.createElement('div');
         locationContainer.classList.add('location-container');
         const city = document.createElement('div');
         city.classList.add('city-name');
+        const region = document.createElement('div');
+        region.classList.add('region-name');
         const country = document.createElement('div');
         country.classList.add('country-name');
         city.textContent = cityName;
+        region.textContent = regionName;
         country.textContent = countryName;
-        appendChildren(locationContainer, [city, country]);
+        appendChildren(locationContainer, [city, region, country]);
         weatherContainer.appendChild(locationContainer);
     }
 
@@ -235,8 +262,8 @@ const view = (() => {
     return { appendChildren, removeFromView, displayLocationName, getTranslation, 
         createSliderContainer, createCardsContainer, translateCard, 
         slideRight, slideLeft, putItemsInCardsContainer, createButtons, createForecastCards, 
-        getWeatherContainer, getSearchInput, getSearchButton, 
-        clearDayDetails, createForecastWeatherCard,
+        getWeatherContainer, getSearchInput, getSearchButton, createAutocomplete, 
+        clearAutocompleteContainer, clearDayDetails, createForecastWeatherCard,
         createDayDetails, clearWeatherContainer }
 })();
 

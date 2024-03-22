@@ -7,7 +7,7 @@ const controller = (() => {
 
     const displayWeatherData = (city, current, forecast) => {
         view.clearWeatherContainer();
-        view.displayLocationName(current.location.city, current.location.country);
+        view.displayLocationName(current.location.city, current.location.region, current.location.country);
         const weatherContainer = view.getWeatherContainer();
         const slider = view.createSliderContainer();
         const cardsContainer = view.createCardsContainer();
@@ -61,7 +61,6 @@ const controller = (() => {
             
         })
 
-        
         window.addEventListener('resize', () => {
             view.slideLeft(cards, leftmostCardId)
             view.slideRight(cards, leftmostCardId+1);
@@ -76,25 +75,53 @@ const controller = (() => {
         })
     }
 
+    const setAutocompleteEvent = (coordinates, option) => {
+        option.addEventListener('click', () => {
+            getWeatherData(coordinates);
+            view.clearAutocompleteContainer();
+        })
+    }
+
+    const autocompleteSearch = (input) => {
+        model.getAutocomplete(input).then((locations) => {
+            const locationNames = [];
+            const locationLatLon = []
+            locations.forEach((location) => {
+                let locationName = location.name;
+                if(location.region.trim() !== '')
+                    locationName += `, ${location.region}`;
+                locationName += `, ${location.country}`;
+                locationNames.push(locationName);
+                locationLatLon.push(`${location.lat},${location.lon}`);
+            })
+            const options = view.createAutocomplete(locationNames);
+            for(let i=0; i<options.length; i++){
+                setAutocompleteEvent(locationLatLon[i], options[i]);
+            }
+        });
+    }
+
     const start = () => {
         model.setUp();
         const searchButton = view.getSearchButton();
         const searchInput = view.getSearchInput();
-        let entered = false;
         searchButton.addEventListener("click", () => {
-            entered = true;
             getWeatherData(searchInput.value);
         });
         searchInput.addEventListener("keypress", (event) => {
-            if(event.key === "Enter" && entered === false){
-                entered = true;
+            if(event.key === "Enter"){
                 event.preventDefault();
                 searchButton.click();
             }
         });
-        searchInput.addEventListener("change", () => {
-            entered = false;
-        });
+        searchInput.addEventListener("input", () => {
+            if (searchInput.value.length > 0)
+                autocompleteSearch(searchInput.value);
+        })
+        searchInput.addEventListener("focus", () => {
+            if (searchInput.value.length > 0)
+                autocompleteSearch(searchInput.value);
+        })
     }
     return { start }
 })()
